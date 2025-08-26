@@ -10,3 +10,4 @@ torchvision
 pillow
 tqdm
 scikit-image
+mlflow
