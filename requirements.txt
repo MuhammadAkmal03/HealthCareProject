@@ -2,6 +2,7 @@ numpy
 pandas
 matplotlib
 scikit-learn
+imblearn
 tensorflow==2.15.0
 seaborn
 torch
