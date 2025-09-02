@@ -212,3 +212,6 @@ __marimo__/
 
 # Ignore all .h5 files
 *.h5
+
+# MLflow files
+mlruns/
