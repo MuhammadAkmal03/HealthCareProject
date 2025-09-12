@@ -19,3 +19,5 @@ chromadb
 pypdf
 beautifulsoup4
 python-dotenv
+
+pytesseract

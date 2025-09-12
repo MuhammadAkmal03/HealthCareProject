@@ -221,3 +221,4 @@ mlruns/
 
 *.bin
 *.sqlite3
+*.png
