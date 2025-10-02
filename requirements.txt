@@ -26,3 +26,6 @@ langchain-huggingface
 huggingface-hub
 langchain-groq
 sentence-transformers
+
+fastapi
+uvicorn[standard]

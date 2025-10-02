@@ -224,3 +224,4 @@ mlruns/
 *.png
 
 *.csv
+*.joblib

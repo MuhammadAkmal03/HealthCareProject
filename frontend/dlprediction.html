@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analyse Chest X-ray - Pulse AI</title>
+    <style>
+        /* All your beautiful CSS from before is here */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif; background: linear-gradient(135deg, #f5f7fa 0%, #e8eef5 100%); min-height: 100vh; }
+        nav { background: white; padding: 1rem 2rem; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100; }
+        .nav-container { max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+        .logo { display: flex; align-items: center; gap: 1rem; text-decoration: none; }
+        .logo-icon { width: 50px; height: 50px; background: linear-gradient(135deg, #9333EA 0%, #7E22CE 100%); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; color: white; }
+        .logo-text h1 { font-size: 1.5rem; color: #1a1a1a; }
+        .logo-text p { font-size: 0.85rem; color: #666; }
+        .nav-links { display: flex; gap: 2rem; align-items: center; }
+        .nav-link { display: flex; align-items: center; gap: 0.5rem; text-decoration: none; color: #444; font-weight: 500; transition: color 0.3s; padding: 0.5rem 1rem; border-radius: 8px; }
+        .nav-link:hover { color: #9333EA; background: #faf5ff; }
+        .nav-link.active { background: #1a1a1a; color: white; }
+        .main-content { max-width: 1200px; margin: 0 auto; padding: 3rem 2rem; }
+        .page-header { text-align: center; margin-bottom: 3rem; }
+        .page-header h2 { font-size: 2.5rem; color: #1a1a1a; margin-bottom: 1rem; }
+        .page-header p { font-size: 1.1rem; color: #666; }
+        .analysis-container { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: start; }
+        .card { background: white; border-radius: 16px; padding: 2.5rem; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+        .card-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
+        .card-icon { width: 45px; height: 45px; background: #9333EA; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 22px; color: white; }
+        .card-header h3 { font-size: 1.5rem; color: #1a1a1a; }
+        .card-subtitle { color: #666; font-size: 0.95rem; margin-bottom: 2rem; }
+        .upload-area { border: 3px dashed #d0d0d0; border-radius: 12px; padding: 3rem 2rem; text-align: center; transition: all 0.3s; cursor: pointer; background: #fafafa; margin-bottom: 2rem; }
+        .upload-area:hover { border-color: #9333EA; background: #f9f5ff; }
+        .upload-area.dragover { border-color: #9333EA; background: #f3e8ff; transform: scale(1.02); }
+        .upload-icon { font-size: 64px; color: #999; margin-bottom: 1rem; }
+        .upload-area h4 { font-size: 1.2rem; color: #333; margin-bottom: 0.5rem; }
+        .upload-area p { color: #666; font-size: 0.95rem; }
+        #fileInput { display: none; }
+        .image-preview { display: none; margin-bottom: 1.5rem; }
+        .image-preview.show { display: block; }
+        .preview-container { position: relative; border-radius: 12px; overflow: hidden; background: #000; }
+        .preview-image { width: 100%; height: auto; max-height: 400px; object-fit: contain; }
+        .remove-image { position: absolute; top: 10px; right: 10px; background: rgba(255, 255, 255, 0.9); border: none; border-radius: 50%; width: 35px; height: 35px; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; transition: all 0.3s; }
+        .remove-image:hover { background: #ff4444; color: white; transform: scale(1.1); }
+        .analyze-btn { width: 100%; padding: 1rem; background: #6b7280; color: white; border: none; border-radius: 10px; font-size: 1.1rem; font-weight: 600; cursor: not-allowed; transition: all 0.3s; display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
+        .analyze-btn.active { background: linear-gradient(135deg, #9333EA 0%, #7E22CE 100%); cursor: pointer; }
+        .analyze-btn.active:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(147, 51, 234, 0.4); }
+        .analyze-btn.loading { background: #9333EA; cursor: wait; }
+        .spinner { display: none; border: 3px solid #f3f3f3; border-top: 3px solid white; border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; }
+        .analyze-btn.loading .spinner { display: block; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .results-card { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 500px; }
+        .eye-icon { font-size: 80px; margin-bottom: 2rem; opacity: 0.3; }
+        .placeholder-text { text-align: center; color: #999; font-size: 1.05rem; line-height: 1.8; }
+        .result-content { width: 100%; display: none; }
+        .result-content.show { display: block; }
+        .diagnosis-result { background: linear-gradient(135deg, #FAF5FF 0%, #F3E8FF 100%); border: 2px solid #E9D5FF; padding: 2rem; border-radius: 12px; margin-bottom: 2rem; }
+        .diagnosis-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+        .diagnosis-name { font-size: 1.75rem; color: #7E22CE; font-weight: 700; }
+        .confidence-badge { background: #7E22CE; color: white; padding: 0.5rem 1rem; border-radius: 20px; font-weight: 600; }
+        .disclaimer { font-size: 0.9rem; color: #6b7280; margin-top: 2rem; background: #FFF7ED; padding: 1rem; border-radius: 8px; border-left: 4px solid #F97316; }
+        @media (max-width: 1024px) { .analysis-container { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <div class="logo-icon">❤️</div>
+                <div class="logo-text">
+                    <h1>Pulse AI</h1>
+                    <p>Advanced Medical Intelligence</p>
+                </div>
+            </a>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">❤️ Home</a>
+                <a href="mlprediction.html" class="nav-link">🧠 Check Symptoms</a>
+                <a href="dlprediction.html" class="nav-link active">🫁 Analyse Chest X-ray</a>
+                </div>
+        </div>
+    </nav>
+
+    <div class="main-content">
+        <div class="page-header">
+            <h2>Deep Learning Image Analysis</h2>
+            <p>Upload a chest X-ray image to get an AI-powered analysis for signs of pneumonia.</p>
+        </div>
+
+        <div class="analysis-container">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">📸</div>
+                    <h3>Upload Image</h3>
+                </div>
+                <p class="card-subtitle">Supported formats: JPG, PNG</p>
+
+                <div class="image-preview" id="imagePreview">
+                    <div class="preview-container">
+                        <img id="previewImg" class="preview-image" alt="Preview">
+                        <button class="remove-image" id="removeImageBtn">✕</button>
+                    </div>
+                </div>
+
+                <div class="upload-area" id="uploadArea">
+                    <div class="upload-icon">⬆️</div>
+                    <h4>Click to upload medical image</h4>
+                    <p>Drag and drop or click to browse</p>
+                </div>
+
+                <input type="file" id="fileInput" accept="image/png, image/jpeg">
+                <button class="analyze-btn" id="analyzeBtn">
+                    <div class="spinner"></div>
+                    <span id="btnText">🔍 Analyze Image</span>
+                </button>
+            </div>
+
+            <div class="card results-card">
+                <div id="placeholderContent">
+                    <div class="eye-icon">👁️</div>
+                    <p class="placeholder-text">Upload an image to begin analysis.</p>
+                </div>
+                <div class="result-content" id="resultContent">
+                    <div class="card-header">
+                        <div class="card-icon">💡</div>
+                        <h3>Analysis Results</h3>
+                    </div>
+                    <div class="diagnosis-result">
+                        <div class="diagnosis-header">
+                            <div class="diagnosis-name" id="diagnosisName"></div>
+                            <div class="confidence-badge" id="confidenceBadge"></div>
+                        </div>
+                    </div>
+                    <div class="disclaimer">
+                        <strong>Disclaimer:</strong> This is an AI-generated analysis for informational purposes and is not a substitute for a professional diagnosis by a qualified radiologist.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const imagePreview = document.getElementById('imagePreview');
+        const previewImg = document.getElementById('previewImg');
+        const removeImageBtn = document.getElementById('removeImageBtn');
+        const analyzeBtn = document.getElementById('analyzeBtn');
+        let imageBase64 = '';
+
+        // --- Event Listeners ---
+        uploadArea.addEventListener('click', () => fileInput.click());
+        fileInput.addEventListener('change', (e) => handleFile(e.target.files[0]));
+        removeImageBtn.addEventListener('click', removeImage);
+        analyzeBtn.addEventListener('click', analyzeImage);
+        
+        // Drag and drop listeners
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            uploadArea.addEventListener(eventName, e => {
+                e.preventDefault();
+                e.stopPropagation();
+            }, false);
+        });
+        ['dragenter', 'dragover'].forEach(eventName => {
+            uploadArea.addEventListener(eventName, () => uploadArea.classList.add('dragover'), false);
+        });
+        ['dragleave', 'drop'].forEach(eventName => {
+            uploadArea.addEventListener(eventName, () => uploadArea.classList.remove('dragover'), false);
+        });
+        uploadArea.addEventListener('drop', (e) => handleFile(e.dataTransfer.files[0]), false);
+
+        function handleFile(file) {
+            if (!file || !file.type.startsWith('image/')) {
+                alert('Please select a valid image file (PNG, JPG).');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                previewImg.src = e.target.result;
+                // Get the Base64 string, stripping the data URL prefix
+                imageBase64 = e.target.result.split(',')[1];
+                
+                // Update UI
+                imagePreview.classList.add('show');
+                uploadArea.style.display = 'none';
+                analyzeBtn.classList.add('active');
+            }
+            reader.readAsDataURL(file);
+        }
+
+        function removeImage() {
+            imageBase64 = '';
+            fileInput.value = ''; // Reset file input
+            imagePreview.classList.remove('show');
+            uploadArea.style.display = 'block';
+            analyzeBtn.classList.remove('active');
+            
+            // Hide results if they were shown
+            document.getElementById('resultContent').classList.remove('show');
+            document.getElementById('placeholderContent').style.display = 'block';
+        }
+
+        async function analyzeImage() {
+            if (!imageBase64) return;
+
+            const btn = document.getElementById('analyzeBtn');
+            const btnText = document.getElementById('btnText');
+            
+            // UI updates for loading state
+            btn.classList.add('loading');
+            btn.disabled = true;
+            btnText.textContent = 'Analyzing...';
+            document.getElementById('placeholderContent').style.display = 'none';
+            document.getElementById('resultContent').classList.add('show');
+            document.getElementById('diagnosisName').textContent = 'Processing...';
+            document.getElementById('confidenceBadge').textContent = '';
+
+            const payload = { "image_base64": imageBase64 };
+
+            try {
+                // Make the actual API call to the backend
+                const response = await fetch('http://127.0.0.1:8000/analyze/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.detail || 'Analysis failed on the server.');
+                }
+
+                const result = await response.json();
+                displayResults(result);
+
+            } catch (error) {
+                console.error("Analysis failed:", error);
+                displayResults({ 
+                    predicted_condition: "Error", 
+                    confidence_score: 0, 
+                    error_message: error.message 
+                });
+            } finally {
+                // Reset button from loading state
+                btn.classList.remove('loading');
+                btn.disabled = false;
+                btnText.textContent = '🔍 Analyze Image';
+            }
+        }
+
+        function displayResults(result) {
+            const diagnosisNameEl = document.getElementById('diagnosisName');
+            const confidenceBadgeEl = document.getElementById('confidenceBadge');
+            
+            if (result.predicted_condition === "Error") {
+                diagnosisNameEl.textContent = 'Analysis Failed';
+                confidenceBadgeEl.textContent = 'Error';
+                alert(result.error_message || 'An unknown error occurred.');
+            } else {
+                diagnosisNameEl.textContent = result.predicted_condition;
+                confidenceBadgeEl.textContent = `${(result.confidence_score * 100).toFixed(1)}% Conf.`;
+            }
+        }
+    </script>
+</body>
+</html>
