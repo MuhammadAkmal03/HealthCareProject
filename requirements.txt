@@ -42,4 +42,4 @@ tqdm==4.66.4
 # --- Compatibility fix ---
 protobuf==4.25.3
 
-pytest
+

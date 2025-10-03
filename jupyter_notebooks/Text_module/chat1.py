@@ -76,9 +76,7 @@ if index_name not in pc.list_indexes().names():
     )
 
 #  Load all PDFs from "documents" folder
-loader = DirectoryLoader(
-    "documents", glob="*.pdf", loader_cls=PyPDFLoader
-)
+loader = DirectoryLoader("documents", glob="*.pdf", loader_cls=PyPDFLoader)
 documents = loader.load()
 
 # Split into chunks
@@ -91,4 +89,3 @@ embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-
 # Push to Pinecone
 PineconeVectorStore.from_documents(chunks, embeddings, index_name=index_name)
 print("All PDFs ingested into Pinecone!")
-

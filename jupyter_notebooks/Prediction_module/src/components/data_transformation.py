@@ -1,6 +1,6 @@
 # import sys
 # from dataclasses import dataclass
-# import numpy as np 
+# import numpy as np
 # import pandas as pd
 # from sklearn.compose import ColumnTransformer
 # from sklearn.pipeline import Pipeline
@@ -50,7 +50,7 @@
 #                     ("one_hot_encoder", OneHotEncoder(handle_unknown='ignore'))
 #                 ]
 #             )
-            
+
 #             logging.info(f"Numerical columns: {numerical_features}")
 #             logging.info(f"Nominal categorical columns: {nominal_categorical_features}")
 
@@ -62,10 +62,10 @@
 #                 remainder='passthrough'
 #             )
 #             return preprocessor
-        
+
 #         except Exception as e:
 #             raise CustomException(e, sys)
-        
+
 #     def initiate_data_transformation(self, train_path, test_path):
 #         """
 #         Performs data transformation by applying feature engineering and
@@ -74,7 +74,7 @@
 #         Args:
 #             train_path (str): The file path to the training data.
 #             test_path (str): The file path to the testing data.
-        
+
 #         Returns:
 #             tuple: A tuple containing the pre-processed data arrays and the preprocessor file path.
 #                    (train_arr, test_arr, preprocessor_obj_file_path)
@@ -94,7 +94,7 @@
 #                     df.drop('Blood_Pressure_mmHg', axis=1, inplace=True)
 #                 if 'Patient_ID' in df.columns:
 #                     df.drop('Patient_ID', axis=1, inplace=True)
-                
+
 #                 if 'Severity' in df.columns:
 #                     df.drop('Severity', axis=1, inplace=True)
 #                 if 'Treatment_Plan' in df.columns:
@@ -112,7 +112,7 @@
 #             target_feature_test_df = test_df[target_column_name]
 
 #             logging.info("Applying preprocessing object on training and testing dataframes.")
-            
+
 #             # Save the fitted LabelEncoder for the prediction pipeline
 #             le = LabelEncoder()
 #             y_train_encoded = le.fit_transform(target_feature_train_df)
@@ -142,31 +142,42 @@
 #             raise CustomException(e, sys)
 import sys
 from dataclasses import dataclass
-import numpy as np 
 import pandas as pd
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import StandardScaler, OneHotEncoder, OrdinalEncoder, LabelEncoder
+from sklearn.preprocessing import (
+    StandardScaler,
+    OneHotEncoder,
+    LabelEncoder,
+)
 from sklearn.impute import SimpleImputer
 
 from Prediction_module.src.exception import CustomException
 from Prediction_module.src.logger import logging
 import os
-from Prediction_module.src.utils import save_object, load_object
+from Prediction_module.src.utils import save_object
+
 
 @dataclass
 class DataTransformationConfig:
     """
     Configuration class for data transformation paths.
     """
-    preprocessor_obj_file_path: str = os.path.join('Prediction_module', 'artifacts', "preprocessor.pkl")
-    label_encoder_path: str = os.path.join('Prediction_module', 'artifacts', "label_encoder.pkl")
+
+    preprocessor_obj_file_path: str = os.path.join(
+        "Prediction_module", "artifacts", "preprocessor.pkl"
+    )
+    label_encoder_path: str = os.path.join(
+        "Prediction_module", "artifacts", "label_encoder.pkl"
+    )
+
 
 class DataTransformation:
     """
     A class to handle data preprocessing, including feature engineering,
     scaling, and encoding of features.
     """
+
     def __init__(self):
         self.data_transformation_config = DataTransformationConfig()
 
@@ -181,55 +192,73 @@ class DataTransformation:
         """
         try:
             logging.info("Obtaining preprocessing objects...")
-            
+
             # Define features that a user can provide
-            numerical_features = ['Age', 'Heart_Rate_bpm', 'Body_Temperature_C', 'Oxygen_Saturation_%', 'Systolic_BP', 'Diastolic_BP']
-            nominal_categorical_features = ['Gender', 'Symptom_1', 'Symptom_2', 'Symptom_3']
+            numerical_features = [
+                "Age",
+                "Heart_Rate_bpm",
+                "Body_Temperature_C",
+                "Oxygen_Saturation_%",
+                "Systolic_BP",
+                "Diastolic_BP",
+            ]
+            nominal_categorical_features = [
+                "Gender",
+                "Symptom_1",
+                "Symptom_2",
+                "Symptom_3",
+            ]
 
             # Pipeline for linear models (scaling is needed)
-            numerical_transformer_linear = Pipeline(steps=[
-                ('imputer', SimpleImputer(strategy='median')),
-                ("scaler", StandardScaler())
-            ])
+            numerical_transformer_linear = Pipeline(
+                steps=[
+                    ("imputer", SimpleImputer(strategy="median")),
+                    ("scaler", StandardScaler()),
+                ]
+            )
 
             # Pipeline for tree-based models (no scaling, just imputation)
-            numerical_transformer_tree = Pipeline(steps=[
-                ('imputer', SimpleImputer(strategy='median')),
-            ])
-            
+            numerical_transformer_tree = Pipeline(
+                steps=[
+                    ("imputer", SimpleImputer(strategy="median")),
+                ]
+            )
+
             # Common pipeline for categorical features
-            categorical_transformer = Pipeline(steps=[
-                ('imputer', SimpleImputer(strategy='most_frequent')),
-                ("one_hot_encoder", OneHotEncoder(handle_unknown='ignore'))
-            ])
-            
+            categorical_transformer = Pipeline(
+                steps=[
+                    ("imputer", SimpleImputer(strategy="most_frequent")),
+                    ("one_hot_encoder", OneHotEncoder(handle_unknown="ignore")),
+                ]
+            )
+
             logging.info(f"Numerical columns: {numerical_features}")
             logging.info(f"Nominal categorical columns: {nominal_categorical_features}")
 
             # Assemble Final Preprocessors for Different Model Types
-            # Preprocessor for Linear Models 
+            # Preprocessor for Linear Models
             linear_model_preprocessor = ColumnTransformer(
                 transformers=[
-                    ('num', numerical_transformer_linear, numerical_features),
-                    ('cat', categorical_transformer, nominal_categorical_features)
+                    ("num", numerical_transformer_linear, numerical_features),
+                    ("cat", categorical_transformer, nominal_categorical_features),
                 ],
-                remainder='passthrough'
+                remainder="passthrough",
             )
 
-            # Preprocessor for Tree-Based Models 
+            # Preprocessor for Tree-Based Models
             tree_model_preprocessor = ColumnTransformer(
                 transformers=[
-                    ('num', numerical_transformer_tree, numerical_features),
-                    ('cat', categorical_transformer, nominal_categorical_features)
+                    ("num", numerical_transformer_tree, numerical_features),
+                    ("cat", categorical_transformer, nominal_categorical_features),
                 ],
-                remainder='passthrough'
+                remainder="passthrough",
             )
-            
+
             return linear_model_preprocessor, tree_model_preprocessor
-        
+
         except Exception as e:
             raise CustomException(e, sys)
-        
+
     def initiate_data_transformation(self, train_path, test_path):
         """
         Performs data transformation by applying feature engineering and
@@ -238,7 +267,7 @@ class DataTransformation:
         Args:
             train_path (str): The file path to the training data.
             test_path (str): The file path to the testing data.
-        
+
         Returns:
             tuple: A tuple containing the pre-processed dataframes and the preprocessor and label encoder file paths.
                    (train_df, test_df, preprocessor_obj_file_path, label_encoder_path)
@@ -252,32 +281,34 @@ class DataTransformation:
 
             # Feature Engineering and Drop columns
             for df in [train_df, test_df]:
-                if 'Blood_Pressure_mmHg' in df.columns:
-                    df[['Systolic_BP', 'Diastolic_BP']] = df['Blood_Pressure_mmHg'].str.split('/', expand=True)
-                    df['Systolic_BP'] = pd.to_numeric(df['Systolic_BP'])
-                    df['Diastolic_BP'] = pd.to_numeric(df['Diastolic_BP'])
-                    df.drop('Blood_Pressure_mmHg', axis=1, inplace=True)
-                if 'Patient_ID' in df.columns:
-                    df.drop('Patient_ID', axis=1, inplace=True)
-                
+                if "Blood_Pressure_mmHg" in df.columns:
+                    df[["Systolic_BP", "Diastolic_BP"]] = df[
+                        "Blood_Pressure_mmHg"
+                    ].str.split("/", expand=True)
+                    df["Systolic_BP"] = pd.to_numeric(df["Systolic_BP"])
+                    df["Diastolic_BP"] = pd.to_numeric(df["Diastolic_BP"])
+                    df.drop("Blood_Pressure_mmHg", axis=1, inplace=True)
+                if "Patient_ID" in df.columns:
+                    df.drop("Patient_ID", axis=1, inplace=True)
+
                 # Dropping these columns as per the notebook logic
-                if 'Severity' in df.columns:
-                    df.drop('Severity', axis=1, inplace=True)
-                if 'Treatment_Plan' in df.columns:
-                    df.drop('Treatment_Plan', axis=1, inplace=True)
-            
+                if "Severity" in df.columns:
+                    df.drop("Severity", axis=1, inplace=True)
+                if "Treatment_Plan" in df.columns:
+                    df.drop("Treatment_Plan", axis=1, inplace=True)
+
             # Save the fitted LabelEncoder for the prediction pipeline
             le = LabelEncoder()
-            le.fit(train_df['Diagnosis'])
+            le.fit(train_df["Diagnosis"])
             save_object(self.data_transformation_config.label_encoder_path, obj=le)
-            
+
             logging.info("LabelEncoder object saved.")
-            
+
             return (
                 train_df,
                 test_df,
                 self.data_transformation_config.preprocessor_obj_file_path,
-                self.data_transformation_config.label_encoder_path
+                self.data_transformation_config.label_encoder_path,
             )
         except Exception as e:
             raise CustomException(e, sys)

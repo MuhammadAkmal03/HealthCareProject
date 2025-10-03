@@ -71,16 +71,13 @@ retriever = vectorstore.as_retriever(search_kwargs={"k": 3})
 llm = ChatGoogleGenerativeAI(
     model="gemini-2.5-flash",
     google_api_key=os.getenv("GOOGLE_API_KEY"),
-    temperature=0.3
+    temperature=0.3,
 )
 
 # ---------------------------
 # 4️⃣ Conversation Memory
 # ---------------------------
-memory = ConversationBufferMemory(
-    memory_key="chat_history",
-    return_messages=True
-)
+memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
 
 # ---------------------------
 # 5️⃣ Prompt Template
@@ -102,8 +99,7 @@ Answer concisely and accurately.
 """
 
 PROMPT = PromptTemplate(
-    template=prompt_template,
-    input_variables=["chat_history", "context", "question"]
+    template=prompt_template, input_variables=["chat_history", "context", "question"]
 )
 
 # ---------------------------
@@ -113,7 +109,7 @@ qa_chain = ConversationalRetrievalChain.from_llm(
     llm=llm,
     retriever=retriever,
     memory=memory,
-    combine_docs_chain_kwargs={"prompt": PROMPT}
+    combine_docs_chain_kwargs={"prompt": PROMPT},
 )
 
 # ---------------------------

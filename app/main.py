@@ -2,24 +2,20 @@ import logging
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-# --- MODIFICATION 1: Import the new router ---
 from app.api import symptom_predictor, scan_analyzer, health_assistant
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+)
 logger = logging.getLogger(__name__)
 
 app = FastAPI(
     title="Healthcare AI API",
     description="API for all healthcare modules.",
-    version="1.0.0"
+    version="1.0.0",
 )
 
-origins = [
-    "http://localhost",
-    "http://127.0.0.1",
-    "http://127.0.0.1:5500",
-    "null"
-]
+origins = ["http://localhost", "http://127.0.0.1", "http://127.0.0.1:5500", "null"]
 
 app.add_middleware(
     CORSMiddleware,
@@ -30,12 +26,14 @@ app.add_middleware(
 )
 
 # --- API Routers ---
-app.include_router(symptom_predictor.router, prefix="/predict", tags=["Symptom Predictor"])
+app.include_router(
+    symptom_predictor.router, prefix="/predict", tags=["Symptom Predictor"]
+)
 
-# --- MODIFICATION 2: Include the new router for the scan analyzer ---
 app.include_router(scan_analyzer.router, prefix="/analyze", tags=["Scan Analyzer"])
 
 app.include_router(health_assistant.router, prefix="/assistant", tags=["AI Assistant"])
+
 
 @app.get("/", tags=["Health Check"])
 def read_root():

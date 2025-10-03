@@ -23,9 +23,7 @@ else:
 # Initialize LLM
 # ---------------------------
 llm = ChatGoogleGenerativeAI(
-    model="gemini-2.5-flash",
-    google_api_key=api_key,
-    temperature=0.5
+    model="gemini-2.5-flash", google_api_key=api_key, temperature=0.5
 )
 
 # ---------------------------
@@ -42,8 +40,7 @@ Do NOT include any personal identifying information such as names or ages.
 CONCISE SUMMARY:
 """
 summary_prompt = PromptTemplate(
-    template=summary_prompt_template,
-    input_variables=["text"]
+    template=summary_prompt_template, input_variables=["text"]
 )
 
 # Load summarization chain
@@ -51,8 +48,9 @@ summarize_chain = load_summarize_chain(
     llm=llm,
     chain_type="map_reduce",
     map_prompt=summary_prompt,
-    combine_prompt=summary_prompt
+    combine_prompt=summary_prompt,
 )
+
 
 # ---------------------------
 # Helper Functions for Data Extraction
@@ -66,22 +64,24 @@ def process_pdf(file_path: str) -> list:
         print(f"Error processing PDF: {e}")
         return []
 
+
 def process_text(raw_text: str) -> list:
     """Takes a raw text string and returns it as a Document."""
     return [Document(page_content=raw_text)]
+
 
 # ---------------------------
 # Summarization
 # ---------------------------
 # Choose the input type: 'pdf' or 'text'
-input_type = 'pdf' 
+input_type = "pdf"
 input_data = "./med_report/test_report.pdf"
 
 # Process the input to get a list of documents
 docs_to_summarize = []
-if input_type == 'pdf':
+if input_type == "pdf":
     docs_to_summarize = process_pdf(input_data)
-elif input_type == 'text':
+elif input_type == "text":
     docs_to_summarize = process_text(input_data)
 else:
     print("Invalid input_type. Please choose 'pdf' or 'text'.")
@@ -89,12 +89,14 @@ else:
 # Run summarization if documents were processed
 if docs_to_summarize:
     print(f"\nStarting summarization for '{input_type}' input...")
-    
+
     # Run the chain on the processed documents
     summary_result = summarize_chain.invoke(docs_to_summarize)
-    
+
     # Print the final summary
-    print("\n" + "-"*20 + " Summary " + "-"*20)
-    print(summary_result['output_text'])
+    print("\n" + "-" * 20 + " Summary " + "-" * 20)
+    print(summary_result["output_text"])
 else:
-    print("\nCould not proceed with summarization due to an error in the previous step.")
+    print(
+        "\nCould not proceed with summarization due to an error in the previous step."
+    )
