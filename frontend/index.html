@@ -39,6 +39,7 @@
             display: flex;
             align-items: center;
             gap: 1rem;
+            text-decoration: none;
         }
 
         .logo-icon {
@@ -259,81 +260,6 @@
             transform: scale(0.98);
         }
 
-        /* Responsive Design */
-        @media (max-width: 1200px) {
-            .modules-container {
-                grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            }
-        }
-
-        @media (max-width: 768px) {
-            .hamburger {
-                display: flex;
-            }
-
-            .nav-links {
-                position: absolute;
-                top: 100%;
-                left: 0;
-                right: 0;
-                background: white;
-                flex-direction: column;
-                padding: 1rem;
-                box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-                display: none;
-                gap: 0.5rem;
-            }
-
-            .nav-links.active {
-                display: flex;
-            }
-
-            .nav-link {
-                width: 100%;
-                justify-content: center;
-            }
-
-            .hero h2 {
-                font-size: 2rem;
-            }
-
-            .hero p {
-                font-size: 1rem;
-            }
-
-            .modules-container {
-                grid-template-columns: 1fr;
-                padding: 1rem;
-                gap: 1.5rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .logo-text h1 {
-                font-size: 1.25rem;
-            }
-
-            .logo-text p {
-                font-size: 0.75rem;
-            }
-
-            .hero h2 {
-                font-size: 1.75rem;
-            }
-
-            .module-card {
-                padding: 1.5rem;
-            }
-
-            .module-header h3 {
-                font-size: 1.25rem;
-            }
-
-            .module-description {
-                font-size: 0.95rem;
-            }
-        }
-
         /* Footer Styles */
         footer {
             background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
@@ -446,7 +372,54 @@
             color: #4169E1;
         }
 
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .modules-container {
+                grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            }
+        }
+
         @media (max-width: 768px) {
+            .hamburger {
+                display: flex;
+            }
+
+            .nav-links {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: white;
+                flex-direction: column;
+                padding: 1rem;
+                box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+                display: none;
+                gap: 0.5rem;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .nav-link {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .hero h2 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .modules-container {
+                grid-template-columns: 1fr;
+                padding: 1rem;
+                gap: 1.5rem;
+            }
+
             .footer-container {
                 grid-template-columns: 1fr;
                 gap: 2rem;
@@ -462,30 +435,56 @@
                 gap: 0.5rem;
             }
         }
+
+        @media (max-width: 480px) {
+            .logo-text h1 {
+                font-size: 1.25rem;
+            }
+
+            .logo-text p {
+                font-size: 0.75rem;
+            }
+
+            .hero h2 {
+                font-size: 1.75rem;
+            }
+
+            .module-card {
+                padding: 1.5rem;
+            }
+
+            .module-header h3 {
+                font-size: 1.25rem;
+            }
+
+            .module-description {
+                font-size: 0.95rem;
+            }
+        }
     </style>
 </head>
 <body>
     <!-- Navigation -->
     <nav>
         <div class="nav-container">
-            <div class="logo">
+            <a href="index.html" class="logo">
                 <div class="logo-icon">❤️</div>
                 <div class="logo-text">
                     <h1>Pulse AI</h1>
                     <p>Advanced Medical Intelligence</p>
                 </div>
-            </div>
+            </a>
             <div class="hamburger" onclick="toggleMenu()">
                 <span></span>
                 <span></span>
                 <span></span>
             </div>
             <div class="nav-links" id="navLinks">
-                <a href="#home" class="nav-link active">❤️ Home</a>
-                <a href="#symptoms" class="nav-link">🧠 Check Symptoms</a>
-                <a href="#xray" class="nav-link">🫁 Analyse Chest X-ray</a>
-                <a href="#assistant" class="nav-link">💬 AI Assistant</a>
-                <a href="#analytics" class="nav-link">📊 Health Analytics</a>
+                <a href="index.html" class="nav-link active">❤️ Home</a>
+                <a href="mlprediction.html" class="nav-link">🧠 Check Symptoms</a>
+                <a href="dlprediction.html" class="nav-link">🫁 Analyse Chest X-ray</a>
+                <a href="aiassist.html" class="nav-link">💬 AI Assistant</a>
+                <a href="visualization.html" class="nav-link">📊 Health Analytics</a>
             </div>
         </div>
     </nav>
@@ -507,7 +506,7 @@
             <p class="module-description">
                 Predict diseases based on symptoms, demographics, and vital signs using advanced machine learning algorithms.
             </p>
-            <button class="launch-btn" onclick="launchModule('mlprediction')">Launch Module</button>
+            <button class="launch-btn" onclick="launchModule('mlprediction')">Predict Disease</button>
         </div>
 
         <!-- Analyse Chest X-ray Module -->
@@ -519,7 +518,7 @@
             <p class="module-description">
                 Analyze medical images using deep learning to detect anomalies and assist in diagnosis.
             </p>
-            <button class="launch-btn" onclick="launchModule('dlprediction')">Launch Module</button>
+            <button class="launch-btn" onclick="launchModule('dlprediction')">Upload a Scan</button>
         </div>
 
         <!-- AI Medical Assistant Module -->
@@ -531,7 +530,7 @@
             <p class="module-description">
                 Get instant medical guidance and answers to health-related questions from our AI assistant.
             </p>
-            <button class="launch-btn" onclick="launchModule('aiassist')">Launch Module</button>
+            <button class="launch-btn" onclick="launchModule('aiassist')">AI Assist</button>
         </div>
 
         <!-- Health Analytics Module -->
@@ -543,7 +542,7 @@
             <p class="module-description">
                 Explore comprehensive healthcare data visualizations and analytics dashboards.
             </p>
-            <button class="launch-btn" onclick="launchModule('visualization')">Launch Module</button>
+            <button class="launch-btn" onclick="launchModule('visualization')">View Analytics</button>
         </div>
     </div>
 
@@ -564,38 +563,15 @@
             </div>
 
             <div class="footer-section">
-                <h4>About Us</h4>
-                <p>Pulse AI is dedicated to revolutionizing healthcare with innovative AI-powered solutions. Our mission is to empower healthcare professionals with intelligent tools for accurate diagnosis, efficient patient care, and data-driven medical insights.</p>
-                <p>Founded by experts in artificial intelligence and healthcare, we combine cutting-edge technology with deep medical knowledge to create solutions that save lives and improve patient outcomes.</p>
-            </div>
-
-            <div class="footer-section">
-                <h4>Quick Links</h4>
-                <ul class="footer-links">
-                    <li><a href="#symptoms">Check Symptoms</a></li>
-                    <li><a href="#xray">Analyse Chest X-ray</a></li>
-                    <li><a href="#assistant">AI Medical Assistant</a></li>
-                    <li><a href="#analytics">Health Analytics</a></li>
-                </ul>
+                <h4>About Me</h4>
+                <p>Pulse AI is dedicated to revolutionizing healthcare with innovative AI-powered solutions. My mission is to empower healthcare professionals with intelligent tools for accurate diagnosis, efficient patient care, and data-driven medical insights.</p>
             </div>
 
             <div class="footer-section">
                 <h4>Contact</h4>
                 <ul class="footer-contact">
-                    <li>📧 info@pulseai.com</li>
-                    <li>📞 +1 (555) 123-4567</li>
-                    <li>📍 Healthcare Innovation Hub</li>
-                    <li>🌐 www.pulseai.com</li>
+                    <li>📧 muhammadakmaltp@gmail.com</li>
                 </ul>
-            </div>
-        </div>
-
-        <div class="footer-bottom">
-            <p>&copy; 2025 Pulse AI. All rights reserved.</p>
-            <div class="footer-bottom-links">
-                <a href="#privacy">Privacy Policy</a>
-                <a href="#terms">Terms of Service</a>
-                <a href="#contact">Contact Us</a>
             </div>
         </div>
     </footer>
@@ -607,23 +583,8 @@
         }
 
         function launchModule(module) {
-            // Redirect to the appropriate page
             window.location.href = `${module}.html`;
         }
-
-        // Smooth scroll for navigation links
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', function(e) {
-                if (this.getAttribute('href').startsWith('#')) {
-                    e.preventDefault();
-                    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-                    this.classList.add('active');
-                    
-                    // Close mobile menu if open
-                    document.getElementById('navLinks').classList.remove('active');
-                }
-            });
-        });
 
         // Close mobile menu when clicking outside
         document.addEventListener('click', function(e) {

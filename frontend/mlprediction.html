@@ -5,349 +5,96 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Check Symptoms - Pulse AI</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif; background: linear-gradient(135deg, #f5f7fa 0%, #e8eef5 100%); min-height: 100vh; }
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #e8eef5 100%);
-            min-height: 100vh;
-        }
-
-        /* Navigation */
-        nav {
-            background: white;
-            padding: 1rem 2rem;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .nav-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            text-decoration: none;
-        }
-
-        .logo-icon {
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(135deg, #4169E1 0%, #1E90FF 100%);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            color: white;
-        }
-
-        .logo-text h1 {
-            font-size: 1.5rem;
-            color: #1a1a1a;
-        }
-
-        .logo-text p {
-            font-size: 0.85rem;
-            color: #666;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-            align-items: center;
-        }
-
-        .nav-link {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            text-decoration: none;
-            color: #444;
-            font-weight: 500;
-            transition: color 0.3s;
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-        }
-
-        .nav-link:hover {
-            color: #4169E1;
-            background: #f0f4ff;
-        }
-
-        .nav-link.active {
-            background: #1a1a1a;
-            color: white;
-        }
+        /* Navigation - Updated to match index.html */
+        nav { background: white; padding: 1rem 2rem; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100; }
+        .nav-container { max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+        .logo { display: flex; align-items: center; gap: 1rem; text-decoration: none; }
+        .logo-icon { width: 50px; height: 50px; background: linear-gradient(135deg, #4169E1 0%, #1E90FF 100%); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; color: white; }
+        .logo-text h1 { font-size: 1.5rem; color: #1a1a1a; }
+        .logo-text p { font-size: 0.85rem; color: #666; }
+        .nav-links { display: flex; gap: 2rem; align-items: center; }
+        .nav-link { display: flex; align-items: center; gap: 0.5rem; text-decoration: none; color: #444; font-weight: 500; transition: color 0.3s; padding: 0.5rem 1rem; border-radius: 8px; }
+        .nav-link:hover { color: #4169E1; background: #f0f4ff; }
+        .nav-link.active { background: #1a1a1a; color: white; }
+        .hamburger { display: none; flex-direction: column; gap: 4px; cursor: pointer; }
+        .hamburger span { width: 25px; height: 3px; background: #1a1a1a; border-radius: 2px; transition: 0.3s; }
         
-        /* Main Content */
-        .main-content {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 3rem 2rem;
-        }
+        .main-content { max-width: 1400px; margin: 0 auto; padding: 3rem 2rem; }
+        .page-header { text-align: center; margin-bottom: 3rem; }
+        .page-header h2 { font-size: 2.5rem; color: #1a1a1a; margin-bottom: 1rem; }
+        .page-header p { font-size: 1.1rem; color: #666; }
+        .prediction-container { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: start; }
+        .card { background: white; border-radius: 16px; padding: 2.5rem; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+        .card-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
+        .card-icon { width: 45px; height: 45px; background: #4169E1; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 22px; color: white; }
+        .card-header h3 { font-size: 1.5rem; color: #1a1a1a; }
+        .card-subtitle { color: #666; font-size: 0.95rem; margin-bottom: 2rem; }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem; }
+        .form-group { display: flex; flex-direction: column; }
+        .form-group label { font-weight: 600; color: #333; margin-bottom: 0.5rem; font-size: 0.95rem; }
+        .form-group input, .form-group select { padding: 0.75rem; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem; transition: border-color 0.3s; background: #f9f9f9; }
+        .form-group input:focus, .form-group select:focus { outline: none; border-color: #4169E1; background: white; }
+        .symptoms-section { margin-top: 2rem; }
+        .symptoms-section h4 { font-size: 1.1rem; color: #333; margin-bottom: 1rem; }
+        .symptoms-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+        .checkbox-group { display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; border: 2px solid #e0e0e0; border-radius: 8px; cursor: pointer; transition: all 0.3s; background: #f9f9f9; }
+        .checkbox-group:hover { border-color: #4169E1; background: white; }
+        .checkbox-group input[type="checkbox"] { width: 20px; height: 20px; cursor: pointer; accent-color: #4169E1; }
+        .checkbox-group label { cursor: pointer; font-size: 0.95rem; color: #333; font-weight: 500; }
+        .predict-btn { width: 100%; padding: 1rem; background: linear-gradient(135deg, #4169E1 0%, #1E90FF 100%); color: white; border: none; border-radius: 10px; font-size: 1.1rem; font-weight: 600; cursor: pointer; transition: transform 0.2s, box-shadow 0.3s; margin-top: 2rem; }
+        .predict-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(65, 105, 225, 0.4); }
+        .results-card { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 500px; }
+        .brain-icon { font-size: 80px; margin-bottom: 2rem; opacity: 0.3; }
+        .placeholder-text { text-align: center; color: #999; font-size: 1.05rem; line-height: 1.8; }
+        .result-content { width: 100%; display: none; }
+        .result-content.show { display: block; }
+        .disease-result { background: linear-gradient(135deg, #EEF2FF 0%, #E0E7FF 100%); border: 2px solid #C7D2FE; padding: 2rem; border-radius: 12px; margin-bottom: 2rem; text-align: center; }
+        .disease-name { font-size: 2rem; color: #3730A3; font-weight: 700; margin-bottom: 1rem; }
+        .recommendations { background: #f9fafb; padding: 1.5rem; border-radius: 10px; border-left: 4px solid #4169E1; }
+        .recommendations h4 { color: #1a1a1a; margin-bottom: 1rem; font-size: 1.2rem; }
+        .recommendations ul { list-style: none; padding-left: 0; }
+        .recommendations li { padding: 0.75rem 0; color: #444; display: flex; align-items: start; gap: 0.75rem; }
+        .recommendations li:before { content: "✓"; color: #22C55E; font-weight: bold; font-size: 1.2rem; }
 
-        .page-header {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-
-        .page-header h2 {
-            font-size: 2.5rem;
-            color: #1a1a1a;
-            margin-bottom: 1rem;
-        }
-
-        .page-header p {
-            font-size: 1.1rem;
-            color: #666;
-        }
-
-        .prediction-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-            align-items: start;
-        }
-
-        .card {
-            background: white;
-            border-radius: 16px;
-            padding: 2.5rem;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-        }
-
-        .card-header {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .card-icon {
-            width: 45px;
-            height: 45px;
-            background: #4169E1;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 22px;
-            color: white;
-        }
-
-        .card-header h3 {
-            font-size: 1.5rem;
-            color: #1a1a1a;
-        }
-
-        .card-subtitle {
-            color: #666;
-            font-size: 0.95rem;
-            margin-bottom: 2rem;
-        }
-
-        .form-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .form-group label {
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 0.5rem;
-            font-size: 0.95rem;
-        }
-
-        .form-group input,
-        .form-group select {
-            padding: 0.75rem;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 1rem;
-            transition: border-color 0.3s;
-            background: #f9f9f9;
-        }
-
-        .form-group input:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: #4169E1;
-            background: white;
-        }
-
-        .symptoms-section {
-            margin-top: 2rem;
-        }
-
-        .symptoms-section h4 {
-            font-size: 1.1rem;
-            color: #333;
-            margin-bottom: 1rem;
-        }
-
-        .symptoms-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
-        }
-
-        .checkbox-group {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 0.75rem;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s;
-            background: #f9f9f9;
-        }
-
-        .checkbox-group:hover {
-            border-color: #4169E1;
-            background: white;
-        }
-
-        .checkbox-group input[type="checkbox"] {
-            width: 20px;
-            height: 20px;
-            cursor: pointer;
-            accent-color: #4169E1;
-        }
-
-        .checkbox-group label {
-            cursor: pointer;
-            font-size: 0.95rem;
-            color: #333;
-            font-weight: 500;
-        }
-
-        .predict-btn {
-            width: 100%;
-            padding: 1rem;
-            background: linear-gradient(135deg, #4169E1 0%, #1E90FF 100%);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.3s;
-            margin-top: 2rem;
-        }
-
-        .predict-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(65, 105, 225, 0.4);
-        }
-
-        /* Results Card */
-        .results-card {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 500px;
-        }
-
-        .brain-icon {
-            font-size: 80px;
-            margin-bottom: 2rem;
-            opacity: 0.3;
-        }
-
-        .placeholder-text {
-            text-align: center;
-            color: #999;
-            font-size: 1.05rem;
-            line-height: 1.8;
-        }
-
-        .result-content {
-            width: 100%;
-            display: none; /* Initially hidden */
-        }
-
-        .result-content.show {
-            display: block;
-        }
-
-        .disease-result {
-            background: linear-gradient(135deg, #EEF2FF 0%, #E0E7FF 100%);
-            border: 2px solid #C7D2FE;
-            padding: 2rem;
-            border-radius: 12px;
-            margin-bottom: 2rem;
-            text-align: center;
-        }
-
-        .disease-name {
-            font-size: 2rem;
-            color: #3730A3;
-            font-weight: 700;
-            margin-bottom: 1rem;
-        }
-        
-        .recommendations {
-            background: #f9fafb;
-            padding: 1.5rem;
-            border-radius: 10px;
-            border-left: 4px solid #4169E1;
-        }
-
-        .recommendations h4 {
-            color: #1a1a1a;
-            margin-bottom: 1rem;
-            font-size: 1.2rem;
-        }
-
-        .recommendations ul {
-            list-style: none;
-            padding-left: 0;
-        }
-
-        .recommendations li {
-            padding: 0.75rem 0;
-            color: #444;
-            display: flex;
-            align-items: start;
-            gap: 0.75rem;
-        }
-
-        .recommendations li:before {
-            content: "✓";
-            color: #22C55E;
-            font-weight: bold;
-            font-size: 1.2rem;
-        }
+        /* Footer Styles - Added from index.html */
+        footer { background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%); color: white; padding: 3rem 2rem 1rem; margin-top: 4rem; }
+        .footer-container { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 3rem; margin-bottom: 2rem; }
+        .footer-section h4 { font-size: 1.25rem; margin-bottom: 1rem; color: #4169E1; }
+        .footer-section p { line-height: 1.8; color: #ccc; margin-bottom: 1rem; }
+        .footer-logo { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
+        .footer-logo h3 { font-size: 1.5rem; margin-bottom: 0.25rem; }
+        .footer-logo p { font-size: 0.85rem; color: #999; margin: 0; }
+        .footer-desc { color: #bbb; font-size: 0.95rem; }
+        .footer-links { list-style: none; }
+        .footer-links li { margin-bottom: 0.75rem; }
+        .footer-links a { color: #ccc; text-decoration: none; transition: color 0.3s; }
+        .footer-links a:hover { color: #4169E1; }
+        .footer-contact { list-style: none; }
+        .footer-contact li { margin-bottom: 0.75rem; color: #ccc; }
+        .footer-bottom { max-width: 1400px; margin: 0 auto; padding-top: 2rem; border-top: 1px solid #444; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+        .footer-bottom p { color: #999; margin: 0; }
+        .footer-bottom-links { display: flex; gap: 2rem; }
+        .footer-bottom-links a { color: #999; text-decoration: none; font-size: 0.9rem; transition: color 0.3s; }
+        .footer-bottom-links a:hover { color: #4169E1; }
 
         /* Responsive Design */
-        @media (max-width: 1024px) {
-            .prediction-container {
-                grid-template-columns: 1fr;
-            }
+        @media (max-width: 1024px) { 
+            .prediction-container { grid-template-columns: 1fr; }
+            .form-grid { grid-template-columns: 1fr; }
+            .symptoms-grid { grid-template-columns: 1fr; }
         }
-        /* Your other responsive styles */
+        @media (max-width: 768px) {
+            .hamburger { display: flex; }
+            .nav-links { position: absolute; top: 100%; left: 0; right: 0; background: white; flex-direction: column; padding: 1rem; box-shadow: 0 4px 10px rgba(0,0,0,0.1); display: none; gap: 0.5rem; }
+            .nav-links.active { display: flex; }
+            .nav-link { width: 100%; justify-content: center; }
+            .footer-container { grid-template-columns: 1fr; gap: 2rem; }
+            .footer-bottom { flex-direction: column; text-align: center; }
+            .footer-bottom-links { flex-direction: column; gap: 0.5rem; }
+        }
     </style>
 </head>
 <body>
@@ -360,11 +107,17 @@
                     <p>Advanced Medical Intelligence</p>
                 </div>
             </a>
-            <div class="nav-links">
+            <div class="hamburger" onclick="toggleMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <div class="nav-links" id="navLinks">
                 <a href="index.html" class="nav-link">❤️ Home</a>
                 <a href="mlprediction.html" class="nav-link active">🧠 Check Symptoms</a>
                 <a href="dlprediction.html" class="nav-link">🫁 Analyse Chest X-ray</a>
-                <!-- Add other links -->
+                <a href="aiassist.html" class="nav-link">💬 AI Assistant</a>
+                <a href="visualization.html" class="nav-link">📊 Health Analytics</a>
             </div>
         </div>
     </nav>
@@ -376,7 +129,6 @@
         </div>
 
         <div class="prediction-container">
-            <!-- Patient Information Card -->
             <div class="card">
                 <div class="card-header">
                     <div class="card-icon">🧠</div>
@@ -409,25 +161,61 @@
                 </form>
             </div>
 
-            <!-- Prediction Results Card -->
             <div class="card results-card">
                 <div id="placeholderContent">
                     <div class="brain-icon">🧠</div>
                     <p class="placeholder-text">Enter patient information and click "Predict Disease" to see the results.</p>
                 </div>
-                <div class="result-content" id="resultContent">
-                    <!-- Results will appear here -->
-                </div>
+                <div class="result-content" id="resultContent"></div>
             </div>
         </div>
     </div>
-    
-    <!-- All footer content is here -->
+
+    <!-- Footer -->
     <footer>
-        <!-- ... -->
+        <div class="footer-container">
+            <div class="footer-section">
+                <div class="footer-logo">
+                    <div class="logo-icon">❤️</div>
+                    <div>
+                        <h3>Pulse AI</h3>
+                        <p>Advanced Medical Intelligence</p>
+                    </div>
+                </div>
+                <p class="footer-desc">
+                    Transforming healthcare through artificial intelligence, providing cutting-edge solutions for medical professionals and patients worldwide.
+                </p>
+            </div>
+
+            <div class="footer-section">
+                <h4>About Me</h4>
+                <p>Pulse AI is dedicated to revolutionizing healthcare with innovative AI-powered solutions. My mission is to empower healthcare professionals with intelligent tools for accurate diagnosis, efficient patient care, and data-driven medical insights.</p>
+            </div>
+
+            <div class="footer-section">
+                <h4>Contact</h4>
+                <ul class="footer-contact">
+                    <li>📧 info@pulseai.com</li>
+                </ul>
+            </div>
+        </div>
     </footer>
 
     <script>
+        function toggleMenu() {
+            const navLinks = document.getElementById('navLinks');
+            navLinks.classList.toggle('active');
+        }
+
+        document.addEventListener('click', function(e) {
+            const navLinks = document.getElementById('navLinks');
+            const hamburger = document.querySelector('.hamburger');
+            
+            if (!navLinks.contains(e.target) && !hamburger.contains(e.target)) {
+                navLinks.classList.remove('active');
+            }
+        });
+
         document.getElementById('predictionForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
@@ -452,15 +240,12 @@
 
             const bpParts = data.bloodPressure.split('/');
             
-            // ===================================================================
-            // THE PAYLOAD HAS BEEN CORRECTED TO MATCH THE MODEL'S EXPECTATIONS
-            // ===================================================================
             const payload = {
                 "Age": parseInt(data.age),
                 "Gender": data.gender,
                 "Heart_Rate_bpm": parseInt(data.heartRate),
                 "Body_Temperature_C": parseFloat(data.temperature),
-                "Oxygen_Saturation_%": parseFloat(data.oxygen), // <-- THIS IS THE FIX
+                "Oxygen_Saturation_%": parseFloat(data.oxygen),
                 "Systolic_BP": parseInt(bpParts[0]),
                 "Diastolic_BP": parseInt(bpParts[1]),
                 "symptoms": data.symptoms

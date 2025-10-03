@@ -1,0 +1,1170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Medical Assistant - Pulse AI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e8eef5 100%);
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+        nav {
+            background: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #4169E1 0%, #1E90FF 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+        }
+
+        .logo-text h1 {
+            font-size: 1.5rem;
+            color: #1a1a1a;
+        }
+
+        .logo-text p {
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            color: #444;
+            font-weight: 500;
+            transition: color 0.3s;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+        }
+
+        .nav-link:hover {
+            color: #4169E1;
+            background: #f0f4ff;
+        }
+
+        .nav-link.active {
+            background: #1a1a1a;
+            color: white;
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 4px;
+            cursor: pointer;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: #1a1a1a;
+            border-radius: 2px;
+            transition: 0.3s;
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .page-header {
+            margin-bottom: 2rem;
+        }
+
+        .page-header h2 {
+            font-size: 2.5rem;
+            color: #1a1a1a;
+            margin-bottom: 1rem;
+        }
+
+        .page-header p {
+            font-size: 1.1rem;
+            color: #666;
+        }
+
+        /* Tab Navigation */
+        .tab-navigation {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            background: white;
+            padding: 0.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 1rem 2rem;
+            border: none;
+            background: transparent;
+            color: #666;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .tab-btn:hover {
+            background: #f0f4ff;
+            color: #4169E1;
+        }
+
+        .tab-btn.active {
+            background: #1a1a1a;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 2rem;
+        }
+
+        /* Cards */
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 2.5rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .card-icon {
+            width: 45px;
+            height: 45px;
+            background: #22C55E;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            color: white;
+        }
+
+        .card-header h3 {
+            font-size: 1.5rem;
+            color: #1a1a1a;
+        }
+
+        .card-subtitle {
+            color: #666;
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Chat Section */
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            height: 600px;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.5rem;
+            background: #f9fafb;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+        }
+
+        .message {
+            margin-bottom: 1.5rem;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .message-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .message.bot .message-avatar {
+            background: #22C55E;
+            color: white;
+        }
+
+        .message.user .message-avatar {
+            background: #4169E1;
+            color: white;
+        }
+
+        .message-content {
+            flex: 1;
+        }
+
+        .message-text {
+            background: white;
+            padding: 1rem 1.25rem;
+            border-radius: 12px;
+            line-height: 1.6;
+            color: #333;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .message.user .message-text {
+            background: #4169E1;
+            color: white;
+        }
+
+        .message-time {
+            font-size: 0.75rem;
+            color: #999;
+            margin-top: 0.5rem;
+            padding-left: 0.25rem;
+        }
+
+        .chat-input-container {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 1rem 1.25rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+            background: #f9f9f9;
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: #22C55E;
+            background: white;
+        }
+
+        .send-btn {
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, #22C55E 0%, #16A34A 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .send-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(34, 197, 94, 0.4);
+        }
+
+        .send-btn:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Quick Questions Sidebar */
+        .sidebar-card {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .sidebar-icon {
+            font-size: 24px;
+        }
+
+        .sidebar-header h4 {
+            font-size: 1.25rem;
+            color: #1a1a1a;
+        }
+
+        .sidebar-subtitle {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .quick-question {
+            padding: 1rem;
+            background: #f9fafb;
+            border: 2px solid #e5e5e5;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+            color: #333;
+        }
+
+        .quick-question:hover {
+            border-color: #22C55E;
+            background: #f0fdf4;
+            transform: translateX(5px);
+        }
+
+        /* Report Summarizer Section */
+        .upload-section {
+            margin-bottom: 2rem;
+        }
+
+        .upload-section h4 {
+            font-size: 1.1rem;
+            color: #1a1a1a;
+            margin-bottom: 1rem;
+        }
+
+        .file-upload-btn {
+            width: 100%;
+            padding: 2rem;
+            border: 3px dashed #d0d0d0;
+            border-radius: 12px;
+            background: #fafafa;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .file-upload-btn:hover {
+            border-color: #22C55E;
+            background: #f0fdf4;
+        }
+
+        .file-upload-btn .upload-icon {
+            font-size: 48px;
+            margin-bottom: 0.5rem;
+        }
+
+        .file-upload-btn p {
+            color: #666;
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .file-preview {
+            display: none;
+            padding: 1rem;
+            background: #f0fdf4;
+            border: 2px solid #22C55E;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+        }
+
+        .file-preview.show {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .file-icon {
+            font-size: 24px;
+        }
+
+        .remove-file-btn {
+            background: #ff4444;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .divider {
+            text-align: center;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 45%;
+            height: 1px;
+            background: #e0e0e0;
+        }
+
+        .divider::before {
+            left: 0;
+        }
+
+        .divider::after {
+            right: 0;
+        }
+
+        .divider span {
+            background: white;
+            padding: 0 1rem;
+            color: #999;
+            font-weight: 600;
+        }
+
+        .text-area {
+            width: 100%;
+            min-height: 300px;
+            padding: 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-family: inherit;
+            resize: vertical;
+            transition: border-color 0.3s;
+            background: #f9f9f9;
+        }
+
+        .text-area:focus {
+            outline: none;
+            border-color: #22C55E;
+            background: white;
+        }
+
+        .generate-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #22C55E 0%, #16A34A 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(34, 197, 94, 0.4);
+        }
+
+        .generate-btn:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .summary-result {
+            display: none;
+            background: #f0fdf4;
+            border: 2px solid #22C55E;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        .summary-result.show {
+            display: block;
+        }
+
+        .summary-result h4 {
+            color: #15803D;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .summary-content {
+            color: #333;
+            line-height: 1.8;
+            white-space: pre-wrap;
+        }
+
+        /* Footer */
+        footer {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: white;
+            padding: 3rem 2rem 1rem;
+            margin-top: 4rem;
+        }
+
+        .footer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h4 {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            color: #4169E1;
+        }
+
+        .footer-section p {
+            line-height: 1.8;
+            color: #ccc;
+            margin-bottom: 1rem;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-logo h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .footer-logo p {
+            font-size: 0.85rem;
+            color: #999;
+            margin: 0;
+        }
+
+        .footer-desc {
+            color: #bbb;
+            font-size: 0.95rem;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-links a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: #4169E1;
+        }
+
+        .footer-contact {
+            list-style: none;
+        }
+
+        .footer-contact li {
+            margin-bottom: 0.75rem;
+            color: #ccc;
+        }
+
+        .footer-bottom {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding-top: 2rem;
+            border-top: 1px solid #444;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .footer-bottom p {
+            color: #999;
+            margin: 0;
+        }
+
+        .footer-bottom-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-bottom-links a {
+            color: #999;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .footer-bottom-links a:hover {
+            color: #4169E1;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .tab-content.active {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hamburger {
+                display: flex;
+            }
+
+            .nav-links {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: white;
+                flex-direction: column;
+                padding: 1rem;
+                box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+                display: none;
+                gap: 0.5rem;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .page-header h2 {
+                font-size: 2rem;
+            }
+
+            .tab-navigation {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .chat-container {
+                height: 500px;
+            }
+
+            .footer-container {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .footer-bottom-links {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .card {
+                padding: 1.5rem;
+            }
+
+            .sidebar-card {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <div class="logo-icon">❤️</div>
+                <div class="logo-text">
+                    <h1>Pulse AI</h1>
+                    <p>Advanced Medical Intelligence</p>
+                </div>
+            </a>
+            <div class="hamburger" onclick="toggleMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <div class="nav-links" id="navLinks">
+                <a href="index.html" class="nav-link">❤️ Home</a>
+                <a href="mlprediction.html" class="nav-link">🧠 Check Symptoms</a>
+                <a href="dlprediction.html" class="nav-link">🫁 Analyse Chest X-ray</a>
+                <a href="aiassist.html" class="nav-link active">💬 AI Assistant</a>
+                <a href="visualization.html" class="nav-link">📊 Health Analytics</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="page-header">
+            <h2>AI Medical Assistant</h2>
+            <p>Get instant health guidance and medical report analysis from our AI-powered assistant</p>
+        </div>
+
+        <!-- Tab Navigation -->
+        <div class="tab-navigation">
+            <button class="tab-btn active" onclick="switchTab('chatbot')">
+                💬 Medical Chatbot
+            </button>
+            <button class="tab-btn" onclick="switchTab('summarizer')">
+                📄 Report Summarizer
+            </button>
+        </div>
+
+        <!-- Chatbot Tab -->
+        <div class="tab-content active" id="chatbot-tab">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">💬</div>
+                    <h3>Medical Chat Assistant</h3>
+                </div>
+                <p class="card-subtitle">Ask questions about health, symptoms, and medical conditions</p>
+
+                <div class="chat-container">
+                    <div class="chat-messages" id="chatMessages">
+                        <div class="message bot">
+                            <div class="message-avatar">🤖</div>
+                            <div class="message-content">
+                                <div class="message-text">
+                                    Hello! I'm your AI Medical Assistant. I can help answer health-related questions, provide general medical information, and guide you on when to seek professional care. How can I assist you today?
+                                </div>
+                                <div class="message-time">08:54 AM</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="chat-input-container">
+                        <input type="text" class="chat-input" id="chatInput" placeholder="Type your health question here..." onkeypress="handleKeyPress(event)">
+                        <button class="send-btn" id="sendBtn" onclick="sendMessage()">Send</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar-card">
+                <div class="sidebar-header">
+                    <span class="sidebar-icon">❤️</span>
+                    <h4>Quick Questions</h4>
+                </div>
+                <p class="sidebar-subtitle">Common health topics to get you started</p>
+
+                <div class="quick-question" onclick="askQuestion('What are the symptoms of common cold?')">
+                    What are the symptoms of common cold?
+                </div>
+                <div class="quick-question" onclick="askQuestion('When should I see a doctor for a headache?')">
+                    When should I see a doctor for a headache?
+                </div>
+                <div class="quick-question" onclick="askQuestion('How to manage high blood pressure?')">
+                    How to manage high blood pressure?
+                </div>
+                <div class="quick-question" onclick="askQuestion('What are the signs of a heart attack?')">
+                    What are the signs of a heart attack?
+                </div>
+            </div>
+        </div>
+
+        <!-- Report Summarizer Tab -->
+        <div class="tab-content" id="summarizer-tab">
+            <div class="card" style="grid-column: 1 / -1;">
+                <div class="card-header">
+                    <div class="card-icon">📄</div>
+                    <h3>Upload Medical Report</h3>
+                </div>
+                <p class="card-subtitle">Upload a PDF file or paste text to generate an AI summary</p>
+
+                <div class="upload-section">
+                    <h4>Upload File (PDF)</h4>
+                    <div class="file-preview" id="filePreview">
+                        <div class="file-info">
+                            <span class="file-icon">📄</span>
+                            <span id="fileName">medical_report.pdf</span>
+                        </div>
+                        <button class="remove-file-btn" onclick="removeFile()">Remove</button>
+                    </div>
+                    <div class="file-upload-btn" id="fileUploadBtn" onclick="document.getElementById('pdfInput').click()">
+                        <div class="upload-icon">⬆️</div>
+                        <p>Choose File</p>
+                    </div>
+                    <input type="file" id="pdfInput" class="file-input" accept=".pdf" onchange="handleFileUpload(event)">
+                </div>
+
+                <div class="divider">
+                    <span>OR</span>
+                </div>
+
+                <div class="text-section">
+                    <h4>Paste Report Text</h4>
+                    <textarea class="text-area" id="reportText" placeholder="Paste your medical report text here..."></textarea>
+                </div>
+
+                <button class="generate-btn" id="generateBtn" onclick="generateSummary()">
+                    📄 Generate Summary
+                </button>
+
+                <div class="summary-result" id="summaryResult">
+                    <h4>AI-Generated Summary</h4>
+                    <div class="summary-content" id="summaryContent"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-section">
+                <div class="footer-logo">
+                    <div class="logo-icon">❤️</div>
+                    <div>
+                        <h3>Pulse AI</h3>
+                        <p>Advanced Medical Intelligence</p>
+                    </div>
+                </div>
+                <p class="footer-desc">
+                    Transforming healthcare through artificial intelligence, providing cutting-edge solutions for medical professionals and patients worldwide.
+                </p>
+            </div>
+
+            <div class="footer-section">
+                <h4>About Us</h4>
+                <p>Pulse AI is dedicated to revolutionizing healthcare with innovative AI-powered solutions. Our mission is to empower healthcare professionals with intelligent tools for accurate diagnosis, efficient patient care, and data-driven medical insights.</p>
+            </div>
+
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul class="footer-links">
+                    <li><a href="mlprediction.html">Check Symptoms</a></li>
+                    <li><a href="dlprediction.html">Analyse Chest X-ray</a></li>
+                    <li><a href="aiassist.html">AI Medical Assistant</a></li>
+                    <li><a href="visualization.html">Health Analytics</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h4>Contact</h4>
+                <ul class="footer-contact">
+                    <li>📧 info@pulseai.com</li>
+                    <li>📞 +1 (555) 123-4567</li>
+                    <li>📍 Healthcare Innovation Hub</li>
+                    <li>🌐 www.pulseai.com</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2025 Pulse AI. All rights reserved.</p>
+            <div class="footer-bottom-links">
+                <a href="#privacy">Privacy Policy</a>
+                <a href="#terms">Terms of Service</a>
+                <a href="#contact">Contact Us</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // API Configuration - UPDATE THIS TO YOUR BACKEND URL
+        // const API_BASE_URL = 'http://localhost:8000/api/v1';
+        const API_BASE_URL = 'http://127.0.0.1:8000';
+
+        function toggleMenu() {
+            const navLinks = document.getElementById('navLinks');
+            navLinks.classList.toggle('active');
+        }
+
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            document.getElementById(tab + '-tab').classList.add('active');
+        }
+
+        // ===== CHATBOT FUNCTIONS =====
+        
+        async function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const sendBtn = document.getElementById('sendBtn');
+            const message = input.value.trim();
+            
+            if (message) {
+                addMessage(message, 'user');
+                input.value = '';
+                sendBtn.disabled = true;
+                
+                // Show typing indicator
+                const typingDiv = document.createElement('div');
+                typingDiv.className = 'message bot';
+                typingDiv.id = 'typing-indicator';
+                typingDiv.innerHTML = `
+                    <div class="message-avatar">🤖</div>
+                    <div class="message-content">
+                        <div class="message-text">Typing...</div>
+                    </div>
+                `;
+                document.getElementById('chatMessages').appendChild(typingDiv);
+                
+                try {
+                    const response = await generateAIResponse(message);
+                    const typingIndicator = document.getElementById('typing-indicator');
+                    if (typingIndicator) {
+                        typingIndicator.remove();
+                    }
+                    addMessage(response, 'bot');
+                } catch (error) {
+                    const typingIndicator = document.getElementById('typing-indicator');
+                    if (typingIndicator) {
+                        typingIndicator.remove();
+                    }
+                    addMessage("Sorry, I encountered an error connecting to the server. Please try again.", 'bot');
+                    console.error('Chat error:', error);
+                } finally {
+                    sendBtn.disabled = false;
+                }
+            }
+        }
+
+        async function generateAIResponse(question) {
+            try {
+                // Build chat history from current messages
+                const chatHistory = [];
+                const messages = document.querySelectorAll('.message');
+                let lastUserMessage = null;
+                
+                messages.forEach((msg) => {
+                    const text = msg.querySelector('.message-text').textContent;
+                    if (text === "Hello! I'm your AI Medical Assistant. I can help answer health-related questions, provide general medical information, and guide you on when to seek professional care. How can I assist you today?") {
+                        return; // Skip initial greeting
+                    }
+                    
+                    if (msg.classList.contains('user')) {
+                        lastUserMessage = text;
+                    } else if (msg.classList.contains('bot') && lastUserMessage) {
+                        chatHistory.push([lastUserMessage, text]);
+                        lastUserMessage = null;
+                    }
+                });
+
+                
+
+
+            const response = await fetch(`${API_BASE_URL}/assistant/chat`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        question: question,
+                        chat_history: chatHistory
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                return data.answer;
+            } catch (error) {
+                console.error('Error calling chatbot API:', error);
+                throw error;
+            }
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        function addMessage(text, sender) {
+            const chatMessages = document.getElementById('chatMessages');
+            const time = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+            
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}`;
+            messageDiv.innerHTML = `
+                <div class="message-avatar">${sender === 'bot' ? '🤖' : '👤'}</div>
+                <div class="message-content">
+                    <div class="message-text">${text}</div>
+                    <div class="message-time">${time}</div>
+                </div>
+            `;
+            
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function askQuestion(question) {
+            document.getElementById('chatInput').value = question;
+            sendMessage();
+        }
+
+        // ===== REPORT SUMMARIZER FUNCTIONS =====
+        
+        let uploadedFile = null;
+
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                if (file.type !== 'application/pdf') {
+                    alert('Please upload a PDF file');
+                    return;
+                }
+                
+                uploadedFile = file;
+                document.getElementById('fileName').textContent = file.name;
+                document.getElementById('filePreview').classList.add('show');
+                document.getElementById('fileUploadBtn').style.display = 'none';
+                document.getElementById('summaryResult').classList.remove('show');
+            }
+        }
+
+        function removeFile() {
+            uploadedFile = null;
+            document.getElementById('filePreview').classList.remove('show');
+            document.getElementById('fileUploadBtn').style.display = 'block';
+            document.getElementById('pdfInput').value = '';
+        }
+
+        async function generateSummary() {
+            const reportText = document.getElementById('reportText').value.trim();
+            
+            if (!uploadedFile && !reportText) {
+                alert('Please upload a PDF file or paste report text');
+                return;
+            }
+
+            const btn = document.getElementById('generateBtn');
+            btn.disabled = true;
+            btn.innerHTML = '⏳ Generating Summary...';
+
+            try {
+                let requestBody = {};
+                
+                if (reportText) {
+                    requestBody.raw_text = reportText;
+                } else if (uploadedFile) {
+                    // Convert file to base64
+                    const base64 = await fileToBase64(uploadedFile);
+                    // Remove the data:application/pdf;base64, prefix
+                    requestBody.pdf_base64 = base64.split(',')[1];
+                }
+
+                const response = await fetch(`${API_BASE_URL}/assistant/summarize`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(requestBody)
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({}));
+                    throw new Error(errorData.detail || `HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                document.getElementById('summaryContent').textContent = data.summary;
+                document.getElementById('summaryResult').classList.add('show');
+
+                // Scroll to results
+                document.getElementById('summaryResult').scrollIntoView({ behavior: 'smooth' });
+            } catch (error) {
+                console.error('Error generating summary:', error);
+                alert('Failed to generate summary. Please check your connection and try again.\n\nError: ' + error.message);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '📄 Generate Summary';
+            }
+        }
+
+        // Helper function to convert file to base64
+        function fileToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+            });
+        }
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(e) {
+            const navLinks = document.getElementById('navLinks');
+            const hamburger = document.querySelector('.hamburger');
+            
+            if (!navLinks.contains(e.target) && !hamburger.contains(e.target)) {
+                navLinks.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>

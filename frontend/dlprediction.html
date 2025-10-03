@@ -5,19 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Analyse Chest X-ray - Pulse AI</title>
     <style>
-        /* All your beautiful CSS from before is here */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif; background: linear-gradient(135deg, #f5f7fa 0%, #e8eef5 100%); min-height: 100vh; }
+        
+        /* Navigation - Updated to match index.html */
         nav { background: white; padding: 1rem 2rem; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100; }
         .nav-container { max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
         .logo { display: flex; align-items: center; gap: 1rem; text-decoration: none; }
-        .logo-icon { width: 50px; height: 50px; background: linear-gradient(135deg, #9333EA 0%, #7E22CE 100%); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; color: white; }
+        .logo-icon { width: 50px; height: 50px; background: linear-gradient(135deg, #4169E1 0%, #1E90FF 100%); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; color: white; }
         .logo-text h1 { font-size: 1.5rem; color: #1a1a1a; }
         .logo-text p { font-size: 0.85rem; color: #666; }
         .nav-links { display: flex; gap: 2rem; align-items: center; }
         .nav-link { display: flex; align-items: center; gap: 0.5rem; text-decoration: none; color: #444; font-weight: 500; transition: color 0.3s; padding: 0.5rem 1rem; border-radius: 8px; }
-        .nav-link:hover { color: #9333EA; background: #faf5ff; }
+        .nav-link:hover { color: #4169E1; background: #f0f4ff; }
         .nav-link.active { background: #1a1a1a; color: white; }
+        .hamburger { display: none; flex-direction: column; gap: 4px; cursor: pointer; }
+        .hamburger span { width: 25px; height: 3px; background: #1a1a1a; border-radius: 2px; transition: 0.3s; }
+        
         .main-content { max-width: 1200px; margin: 0 auto; padding: 3rem 2rem; }
         .page-header { text-align: center; margin-bottom: 3rem; }
         .page-header h2 { font-size: 2.5rem; color: #1a1a1a; margin-bottom: 1rem; }
@@ -58,7 +62,41 @@
         .diagnosis-name { font-size: 1.75rem; color: #7E22CE; font-weight: 700; }
         .confidence-badge { background: #7E22CE; color: white; padding: 0.5rem 1rem; border-radius: 20px; font-weight: 600; }
         .disclaimer { font-size: 0.9rem; color: #6b7280; margin-top: 2rem; background: #FFF7ED; padding: 1rem; border-radius: 8px; border-left: 4px solid #F97316; }
-        @media (max-width: 1024px) { .analysis-container { grid-template-columns: 1fr; } }
+
+        /* Footer Styles - Added from index.html */
+        footer { background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%); color: white; padding: 3rem 2rem 1rem; margin-top: 4rem; }
+        .footer-container { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 3rem; margin-bottom: 2rem; }
+        .footer-section h4 { font-size: 1.25rem; margin-bottom: 1rem; color: #4169E1; }
+        .footer-section p { line-height: 1.8; color: #ccc; margin-bottom: 1rem; }
+        .footer-logo { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
+        .footer-logo h3 { font-size: 1.5rem; margin-bottom: 0.25rem; }
+        .footer-logo p { font-size: 0.85rem; color: #999; margin: 0; }
+        .footer-desc { color: #bbb; font-size: 0.95rem; }
+        .footer-links { list-style: none; }
+        .footer-links li { margin-bottom: 0.75rem; }
+        .footer-links a { color: #ccc; text-decoration: none; transition: color 0.3s; }
+        .footer-links a:hover { color: #4169E1; }
+        .footer-contact { list-style: none; }
+        .footer-contact li { margin-bottom: 0.75rem; color: #ccc; }
+        .footer-bottom { max-width: 1400px; margin: 0 auto; padding-top: 2rem; border-top: 1px solid #444; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+        .footer-bottom p { color: #999; margin: 0; }
+        .footer-bottom-links { display: flex; gap: 2rem; }
+        .footer-bottom-links a { color: #999; text-decoration: none; font-size: 0.9rem; transition: color 0.3s; }
+        .footer-bottom-links a:hover { color: #4169E1; }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) { 
+            .analysis-container { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 768px) {
+            .hamburger { display: flex; }
+            .nav-links { position: absolute; top: 100%; left: 0; right: 0; background: white; flex-direction: column; padding: 1rem; box-shadow: 0 4px 10px rgba(0,0,0,0.1); display: none; gap: 0.5rem; }
+            .nav-links.active { display: flex; }
+            .nav-link { width: 100%; justify-content: center; }
+            .footer-container { grid-template-columns: 1fr; gap: 2rem; }
+            .footer-bottom { flex-direction: column; text-align: center; }
+            .footer-bottom-links { flex-direction: column; gap: 0.5rem; }
+        }
     </style>
 </head>
 <body>
@@ -71,11 +109,18 @@
                     <p>Advanced Medical Intelligence</p>
                 </div>
             </a>
-            <div class="nav-links">
+            <div class="hamburger" onclick="toggleMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <div class="nav-links" id="navLinks">
                 <a href="index.html" class="nav-link">❤️ Home</a>
                 <a href="mlprediction.html" class="nav-link">🧠 Check Symptoms</a>
                 <a href="dlprediction.html" class="nav-link active">🫁 Analyse Chest X-ray</a>
-                </div>
+                <a href="aiassist.html" class="nav-link">💬 AI Assistant</a>
+                <a href="visualization.html" class="nav-link">📊 Health Analytics</a>
+            </div>
         </div>
     </nav>
 
@@ -136,8 +181,53 @@
             </div>
         </div>
     </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-section">
+                <div class="footer-logo">
+                    <div class="logo-icon">❤️</div>
+                    <div>
+                        <h3>Pulse AI</h3>
+                        <p>Advanced Medical Intelligence</p>
+                    </div>
+                </div>
+                <p class="footer-desc">
+                    Transforming healthcare through artificial intelligence, providing cutting-edge solutions for medical professionals and patients worldwide.
+                </p>
+            </div>
+
+            <div class="footer-section">
+                <h4>About Me</h4>
+                <p>Pulse AI is dedicated to revolutionizing healthcare with innovative AI-powered solutions. My mission is to empower healthcare professionals with intelligent tools for accurate diagnosis, efficient patient care, and data-driven medical insights.</p>
+            </div>
+
+            <div class="footer-section">
+                <h4>Contact</h4>
+                <ul class="footer-contact">
+                    <li>📧 info@pulseai.com</li>
+                </ul>
+            </div>
+        </div>
+    </footer>
     
     <script>
+        function toggleMenu() {
+            const navLinks = document.getElementById('navLinks');
+            navLinks.classList.toggle('active');
+        }
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(e) {
+            const navLinks = document.getElementById('navLinks');
+            const hamburger = document.querySelector('.hamburger');
+            
+            if (!navLinks.contains(e.target) && !hamburger.contains(e.target)) {
+                navLinks.classList.remove('active');
+            }
+        });
+
         const uploadArea = document.getElementById('uploadArea');
         const fileInput = document.getElementById('fileInput');
         const imagePreview = document.getElementById('imagePreview');
@@ -146,13 +236,11 @@
         const analyzeBtn = document.getElementById('analyzeBtn');
         let imageBase64 = '';
 
-        // --- Event Listeners ---
         uploadArea.addEventListener('click', () => fileInput.click());
         fileInput.addEventListener('change', (e) => handleFile(e.target.files[0]));
         removeImageBtn.addEventListener('click', removeImage);
         analyzeBtn.addEventListener('click', analyzeImage);
         
-        // Drag and drop listeners
         ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
             uploadArea.addEventListener(eventName, e => {
                 e.preventDefault();
@@ -176,10 +264,8 @@
             const reader = new FileReader();
             reader.onload = function(e) {
                 previewImg.src = e.target.result;
-                // Get the Base64 string, stripping the data URL prefix
                 imageBase64 = e.target.result.split(',')[1];
                 
-                // Update UI
                 imagePreview.classList.add('show');
                 uploadArea.style.display = 'none';
                 analyzeBtn.classList.add('active');
@@ -189,12 +275,11 @@
 
         function removeImage() {
             imageBase64 = '';
-            fileInput.value = ''; // Reset file input
+            fileInput.value = '';
             imagePreview.classList.remove('show');
             uploadArea.style.display = 'block';
             analyzeBtn.classList.remove('active');
             
-            // Hide results if they were shown
             document.getElementById('resultContent').classList.remove('show');
             document.getElementById('placeholderContent').style.display = 'block';
         }
@@ -205,7 +290,6 @@
             const btn = document.getElementById('analyzeBtn');
             const btnText = document.getElementById('btnText');
             
-            // UI updates for loading state
             btn.classList.add('loading');
             btn.disabled = true;
             btnText.textContent = 'Analyzing...';
@@ -217,7 +301,6 @@
             const payload = { "image_base64": imageBase64 };
 
             try {
-                // Make the actual API call to the backend
                 const response = await fetch('http://127.0.0.1:8000/analyze/', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -240,7 +323,6 @@
                     error_message: error.message 
                 });
             } finally {
-                // Reset button from loading state
                 btn.classList.remove('loading');
                 btn.disabled = false;
                 btnText.textContent = '🔍 Analyze Image';
