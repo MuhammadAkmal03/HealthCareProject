@@ -1,43 +1,3 @@
-# numpy
-# pandas
-# matplotlib
-# scikit-learn
-# imblearn
-# tensorflow==2.18.0
-# seaborn
-# torch
-# torchvision
-# pillow
-# tqdm
-# scikit-image
-# mlflow
-# tf-keras
-
-# langchain
-# langchain-community
-# langchain-google-genai
-# chromadb
-# pypdf
-# beautifulsoup4
-# python-dotenv
-
-# pytesseract
-
-# langchain-huggingface
-# huggingface-hub
-# langchain-groq
-
-# fastapi
-# uvicorn[standard]
-
-# sentence-transformers
-# pinecone[grpc]
-# langchain-pinecone
-# langchain_experimental
-# langchain_huggingface
-# google-generativeai
-
-
 # --- API Framework ---
 fastapi==0.111.1
 uvicorn[standard]==0.30.1
@@ -81,3 +41,5 @@ tqdm==4.66.4
 
 # --- Compatibility fix ---
 protobuf==4.25.3
+
+pytest
