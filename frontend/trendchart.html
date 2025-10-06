@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pulse AI - Advanced Medical Intelligence</title>
+    <title>Healthcare Analytics - Pulse AI</title>
     <style>
         * {
             margin: 0;
@@ -11,10 +11,16 @@
             box-sizing: border-box;
         }
 
+        html {
+            height: 100%;
+        }
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
             background: linear-gradient(135deg, #f5f7fa 0%, #e8eef5 100%);
             min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
         /* Navigation */
@@ -107,165 +113,109 @@
             transition: 0.3s;
         }
 
-        /* Hero Section */
-        .hero {
-            text-align: center;
-            padding: 4rem 2rem;
-            max-width: 1200px;
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            max-width: 1400px;
+            width: 100%;
             margin: 0 auto;
+            padding: 3rem 2rem;
         }
 
-        .hero h2 {
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .page-header h2 {
             font-size: 3rem;
             color: #1a1a1a;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
             font-weight: 700;
         }
 
-        .hero p {
-            font-size: 1.25rem;
-            color: #555;
-            line-height: 1.8;
-            max-width: 900px;
-            margin: 0 auto;
+        .page-header p {
+            font-size: 1.2rem;
+            color: #666;
         }
 
-        /* Modules Grid */
-        .modules-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 2rem;
+        /* Analytics Cards */
+        .analytics-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
             gap: 2rem;
+            margin-top: 3rem;
         }
 
-        .module-card {
+        .analytics-card {
             background: white;
-            border-radius: 16px;
-            padding: 2.5rem;
+            border-radius: 20px;
+            padding: 3rem;
             box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-
-        .module-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
-        }
-
-        .module-card.blue {
-            background: linear-gradient(135deg, #EEF2FF 0%, #E0E7FF 100%);
-            border: 2px solid #C7D2FE;
-        }
-
-        .module-card.purple {
-            background: linear-gradient(135deg, #FAF5FF 0%, #F3E8FF 100%);
-            border: 2px solid #E9D5FF;
-        }
-
-        .module-card.green {
-            background: linear-gradient(135deg, #F0FDF4 0%, #DCFCE7 100%);
-            border: 2px solid #BBF7D0;
-        }
-
-        .module-card.orange {
-            background: linear-gradient(135deg, #FFF7ED 0%, #FFEDD5 100%);
-            border: 2px solid #FED7AA;
-        }
-
-        .module-header {
+            transition: all 0.3s;
+            cursor: pointer;
+            text-decoration: none;
             display: flex;
             align-items: center;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
+            gap: 2rem;
         }
 
-        .module-icon {
-            width: 50px;
-            height: 50px;
-            border-radius: 12px;
+        .analytics-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+        }
+
+        .analytics-card.trend {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border: 2px solid #bae6fd;
+        }
+
+        .analytics-card.dataset {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border: 2px solid #fcd34d;
+        }
+
+        .card-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
+            font-size: 40px;
+            flex-shrink: 0;
         }
 
-        .blue .module-icon {
-            background: #4169E1;
+        .analytics-card.trend .card-icon {
+            background: #0ea5e9;
             color: white;
         }
 
-        .purple .module-icon {
-            background: #9333EA;
+        .analytics-card.dataset .card-icon {
+            background: #f59e0b;
             color: white;
         }
 
-        .green .module-icon {
-            background: #22C55E;
-            color: white;
+        .card-content h3 {
+            font-size: 1.8rem;
+            color: #1a1a1a;
+            margin-bottom: 0.5rem;
         }
 
-        .orange .module-icon {
-            background: #F97316;
-            color: white;
+        .analytics-card.trend .card-content h3 {
+            color: #075985;
         }
 
-        .module-header h3 {
-            font-size: 1.5rem;
-            font-weight: 600;
+        .analytics-card.dataset .card-content h3 {
+            color: #92400e;
         }
 
-        .blue .module-header h3 {
-            color: #3730A3;
-        }
-
-        .purple .module-header h3 {
-            color: #7E22CE;
-        }
-
-        .green .module-header h3 {
-            color: #15803D;
-        }
-
-        .orange .module-header h3 {
-            color: #C2410C;
-        }
-
-        .module-description {
-            color: #444;
-            font-size: 1.05rem;
-            line-height: 1.7;
-            margin-bottom: 2rem;
-        }
-
-        .launch-btn {
-            width: 100%;
-            padding: 1rem;
-            background: #1a1a1a;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.3s, transform 0.2s;
-        }
-
-        .launch-btn:hover {
-            background: #333;
-            transform: scale(1.02);
-        }
-
-        .launch-btn:active {
-            transform: scale(0.98);
-        }
-
-        /* Footer Styles */
+        /* Footer */
         footer {
             background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
             color: white;
             padding: 3rem 2rem 1rem;
-            margin-top: 4rem;
+            margin-top: auto;
         }
 
         .footer-container {
@@ -373,12 +323,6 @@
         }
 
         /* Responsive Design */
-        @media (max-width: 1200px) {
-            .modules-container {
-                grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            }
-        }
-
         @media (max-width: 768px) {
             .hamburger {
                 display: flex;
@@ -401,23 +345,26 @@
                 display: flex;
             }
 
-            .nav-link {
-                width: 100%;
-                justify-content: center;
-            }
-
-            .hero h2 {
+            .page-header h2 {
                 font-size: 2rem;
             }
 
-            .hero p {
-                font-size: 1rem;
+            .analytics-grid {
+                grid-template-columns: 1fr;
             }
 
-            .modules-container {
-                grid-template-columns: 1fr;
-                padding: 1rem;
-                gap: 1.5rem;
+            .analytics-card {
+                padding: 2rem;
+            }
+
+            .card-icon {
+                width: 60px;
+                height: 60px;
+                font-size: 30px;
+            }
+
+            .card-content h3 {
+                font-size: 1.4rem;
             }
 
             .footer-container {
@@ -433,32 +380,6 @@
             .footer-bottom-links {
                 flex-direction: column;
                 gap: 0.5rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .logo-text h1 {
-                font-size: 1.25rem;
-            }
-
-            .logo-text p {
-                font-size: 0.75rem;
-            }
-
-            .hero h2 {
-                font-size: 1.75rem;
-            }
-
-            .module-card {
-                padding: 1.5rem;
-            }
-
-            .module-header h3 {
-                font-size: 1.25rem;
-            }
-
-            .module-description {
-                font-size: 0.95rem;
             }
         }
     </style>
@@ -480,69 +401,38 @@
                 <span></span>
             </div>
             <div class="nav-links" id="navLinks">
-                <a href="index.html" class="nav-link active">❤️ Home</a>
+                <a href="index.html" class="nav-link">❤️ Home</a>
                 <a href="mlprediction.html" class="nav-link">🧠 Check Symptoms</a>
                 <a href="dlprediction.html" class="nav-link">🫁 Analyse Chest X-ray</a>
                 <a href="aiassist.html" class="nav-link">💬 AI Assistant</a>
-                <a href="trendchart.html" class="nav-link">📊 Health Analytics</a>
+                <a href="trendchart.html" class="nav-link active">📊 Health Analytics</a>
             </div>
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <h2>Advanced Healthcare AI Platform</h2>
-        <p>Empowering healthcare professionals with cutting-edge artificial intelligence for accurate diagnosis, patient care, and medical insights.</p>
-    </section>
-
-    <!-- Modules Grid -->
-    <div class="modules-container">
-        <!-- Check Symptoms Module -->
-        <div class="module-card blue">
-            <div class="module-header">
-                <div class="module-icon">🧠</div>
-                <h3>Check Symptoms</h3>
-            </div>
-            <p class="module-description">
-                Predict diseases based on symptoms, demographics, and vital signs using advanced machine learning algorithms.
-            </p>
-            <button class="launch-btn" onclick="launchModule('mlprediction')">Predict Disease</button>
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="page-header">
+            <h2>Healthcare Analytics Dashboard</h2>
+            <p>Interactive Tableau visualizations for trend analysis and comprehensive data overviews</p>
         </div>
 
-        <!-- Analyse Chest X-ray Module -->
-        <div class="module-card purple">
-            <div class="module-header">
-                <div class="module-icon">📸</div>
-                <h3>Analyse Chest X-ray</h3>
-            </div>
-            <p class="module-description">
-                Analyze medical images using deep learning to detect anomalies and assist in diagnosis.
-            </p>
-            <button class="launch-btn" onclick="launchModule('dlprediction')">Upload a Scan</button>
-        </div>
+        <div class="analytics-grid">
+            <!-- Trend Charts Card -->
+            <a href="#" class="analytics-card trend" onclick="return false;">
+                <div class="card-icon">📈</div>
+                <div class="card-content">
+                    <h3>Trend Charts</h3>
+                </div>
+            </a>
 
-        <!-- AI Medical Assistant Module -->
-        <div class="module-card green">
-            <div class="module-header">
-                <div class="module-icon">💬</div>
-                <h3>AI Medical Assistant</h3>
-            </div>
-            <p class="module-description">
-                Get instant medical guidance and answers to health-related questions from our AI assistant.
-            </p>
-            <button class="launch-btn" onclick="launchModule('aiassist')">AI Assist</button>
-        </div>
-
-        <!-- Health Analytics Module -->
-        <div class="module-card orange">
-            <div class="module-header">
-                <div class="module-icon">📊</div>
-                <h3>Health Analytics</h3>
-            </div>
-            <p class="module-description">
-                Explore comprehensive healthcare data visualizations and analytics dashboards.
-            </p>
-            <button class="launch-btn" onclick="launchModule('trendchart')">View Analytics</button>
+            <!-- Dataset Overview Card -->
+            <a href="visualization.html" class="analytics-card dataset">
+                <div class="card-icon">🗄️</div>
+                <div class="card-content">
+                    <h3>Dataset Overview</h3>
+                </div>
+            </a>
         </div>
     </div>
 
@@ -563,8 +453,8 @@
             </div>
 
             <div class="footer-section">
-                <h4>About Me</h4>
-                <p>Pulse AI is dedicated to revolutionizing healthcare with innovative AI-powered solutions. My mission is to empower healthcare professionals with intelligent tools for accurate diagnosis, efficient patient care, and data-driven medical insights.</p>
+                <h4>About Us</h4>
+                <p>Pulse AI is dedicated to revolutionizing healthcare with innovative AI-powered solutions. Our mission is to empower healthcare professionals with intelligent tools for accurate diagnosis, efficient patient care, and data-driven medical insights.</p>
             </div>
 
             <div class="footer-section">
@@ -582,11 +472,6 @@
             navLinks.classList.toggle('active');
         }
 
-        function launchModule(module) {
-            window.location.href = `${module}.html`;
-        }
-
-        // Close mobile menu when clicking outside
         document.addEventListener('click', function(e) {
             const navLinks = document.getElementById('navLinks');
             const hamburger = document.querySelector('.hamburger');

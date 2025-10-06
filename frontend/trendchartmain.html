@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Disease Trends</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <h2>Disease Prediction Trends</h2>
+    <canvas id="trendChart" width="800" height="400"></canvas>
+
+    <script>
+        async function loadTrends() {
+            const res = await fetch("/analytics/trends/data");
+            const data = await res.json();
+
+            // Extract days and diseases
+            const labels = Object.keys(data);  // Dates
+            const diseases = [...new Set(labels.flatMap(day => Object.keys(data[day])))];
+
+            // Build dataset for each disease
+            const datasets = diseases.map(disease => ({
+                label: disease,
+                data: labels.map(day => data[day][disease] || 0),
+                borderWidth: 2,
+                fill: false,
+                borderColor: getRandomColor()
+            }));
+
+            new Chart(document.getElementById("trendChart"), {
+                type: "line",
+                data: { labels, datasets },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { position: "top" } },
+                    scales: { y: { beginAtZero: true } }
+                }
+            });
+        }
+
+        function getRandomColor() {
+            return `hsl(${Math.floor(Math.random() * 360)}, 70%, 50%)`;
+        }
+
+        loadTrends();
+    </script>
+</body>
+</html>

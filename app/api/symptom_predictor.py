@@ -44,3 +44,6 @@ def predict_diagnosis(request: SymptomPredictionRequest):
         raise HTTPException(
             status_code=500, detail="An internal server error occurred."
         )
+
+
+

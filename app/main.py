@@ -2,7 +2,7 @@ import logging
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api import symptom_predictor, scan_analyzer, health_assistant
+from app.api import symptom_predictor, scan_analyzer, health_assistant ,analytics
 
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
@@ -33,6 +33,8 @@ app.include_router(
 app.include_router(scan_analyzer.router, prefix="/analyze", tags=["Scan Analyzer"])
 
 app.include_router(health_assistant.router, prefix="/assistant", tags=["AI Assistant"])
+
+app.include_router(analytics.router, prefix="/analytics")
 
 
 @app.get("/", tags=["Health Check"])

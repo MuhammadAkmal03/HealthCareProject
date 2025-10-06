@@ -93,3 +93,9 @@ class PredictionService:
                 f"An error occurred during the prediction process: {e}", exc_info=True
             )
             raise
+
+
+
+
+    
+    
