@@ -54,7 +54,21 @@ class ChatbotService:
                 logger.info("Conversational RAG chain created successfully.")
 
                 # 4. Build the Summarization Chain
-                summary_prompt_template = 'Write a concise summary of the following medical text: "{text}" CONCISE SUMMARY:'
+                summary_prompt_template = """
+                You are an AI assistant that summarizes medical reports for patients in a friendly, simple paragraph.
+
+                **CRITICAL INSTRUCTIONS:**
+                1. BE EXTREMELY CONCISE. The entire summary must be a single, easy-to-read paragraph, no more than 4-5 sentences.
+                2. Address the user directly using "your report".
+                3. DO NOT use bullet points, lists, asterisks (*), or dashes (-). Write in plain paragraph format.
+                4. DO NOT include any personal details like age or gender.
+                5. Focus only on the most important findings that require discussion with a doctor.
+
+                Medical Text:
+                "{text}"
+
+                Concise, friendly, single-paragraph summary:
+                """
                 summary_prompt = PromptTemplate(template=summary_prompt_template, input_variables=["text"])
                 ChatbotService._summarize_chain = load_summarize_chain(llm=ChatbotService._llm, chain_type="stuff", prompt=summary_prompt)
                 logger.info("Summarization chain created successfully.")
