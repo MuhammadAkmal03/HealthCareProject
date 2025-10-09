@@ -211,7 +211,7 @@ marimo/_lsp/
 __marimo__/
 
 # Ignore all .h5 files
-*.h5
+
 
 # MLflow files
 mlruns/
@@ -219,9 +219,7 @@ mlruns/
 # Avoid pdf files
 *.pdf
 
-*.bin
 *.sqlite3
 *.png
 
 *.csv
-*.joblib
