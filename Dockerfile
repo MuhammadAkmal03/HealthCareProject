@@ -1,31 +1,20 @@
-# Use Python 3.10 slim (lighter image, faster builds)
-FROM python:3.10-slim
+# Step 1: Use an official, slim Python runtime as a parent image
+FROM python:3.10-slim-buster
 
-# Prevent Python from writing .pyc files & force logs to show immediately
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
-
-# Set working directory
+# Step 2: Set the working directory inside the container
 WORKDIR /app
 
-# Install system dependencies (needed for some libs like numpy, pandas, psycopg2 etc.)
-RUN apt-get update && apt-get install -y \
-    gcc \
-    g++ \
-    libpq-dev \
-    && rm -rf /var/lib/apt/lists/*
-
-# Copy requirements first (for Docker cache efficiency)
+# Step 3: Copy the requirements file
 COPY requirements.txt .
 
-# Install dependencies
-RUN pip install --upgrade pip && pip install -r requirements.txt
+RUN pip install --no-cache-dir --timeout=600 -r requirements.txt
 
-# Copy project files into container
-COPY . .
+# Step 5: Copy your application code and model artifacts
+COPY ./app /app/app
+COPY ./ml_models /app/ml_models
 
-# Expose FastAPI default port
+# Step 6: Expose the application port
 EXPOSE 8000
 
-# Run FastAPI with Uvicorn
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Step 7: Define the command to run your application
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]

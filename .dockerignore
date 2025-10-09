@@ -1,12 +1,53 @@
+# Python virtual environment
 venv/
+
+# Python cache files
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
-.Python
-.env
-.git
-.gitignore
+
+# IDE and editor settings
+.vscode/
+.idea/
+
+# Git folder
+.git/
+
+# Caching from dev tools
+.pytest_cache/
+.ruff_cache/
+
+# Experimental notebooks
 jupyter_notebooks/
-experiments/
-*.ipynb
+DeepLearning_module/
+Prediction_module/
+Text_module/
+
+# Frontend code 
+frontend/
+
+# Secrets file 
+.env
+
+# Local database file
+predictions.db
+
+# Testing folder
+tests/
+
+# MLflow experiment logs
+mlruns/
+
+# Python packaging files 
+setup.py
+dist/
+build/
+*.egg-info/
+
+# Configuration files for other tools
+pyproject.toml
+
+# Any other local files
+*.csv
+*.md

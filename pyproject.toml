@@ -1,0 +1,6 @@
+[tool.deptry]
+sources = ["app"]
+
+exclude = [".venv", "tests", "jupyter_notebooks"]
+
+ignore_unused = ["uvicorn"]
