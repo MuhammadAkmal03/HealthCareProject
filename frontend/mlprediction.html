@@ -202,6 +202,7 @@
     </footer>
 
     <script>
+        const API_BASE_URL = 'api';
         function toggleMenu() {
             const navLinks = document.getElementById('navLinks');
             navLinks.classList.toggle('active');
@@ -252,7 +253,7 @@
             };
 
             try {
-                const response = await fetch('api/predict', {
+                const response = await fetch(`${API_BASE_URL}/predict`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
