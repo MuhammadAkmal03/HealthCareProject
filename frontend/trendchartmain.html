@@ -169,7 +169,7 @@
         async function fetchTrendDataAndDrawChart() {
             const ctx = document.getElementById('diagnosisTrendChart').getContext('2d');
             try {
-                const response = await fetch('http://3.107.252.106/predict/trends');
+                const response = await fetch('api/predict/trends');
                 if (!response.ok) throw new Error('Failed to fetch trend data. Is the backend server running?');
                 
                 const trendData = await response.json();
@@ -211,7 +211,7 @@
         async function fetchTopicsAndDrawChart() {
             const ctx = document.getElementById('queryTopicsChart').getContext('2d');
             try {
-                const response = await fetch('http://3.107.252.106/assistant/query_topics');
+                const response = await fetch('api/assistant/query_topics');
                 if (!response.ok) throw new Error('Failed to fetch topic data from the server.');
 
                 const topicData = await response.json();
