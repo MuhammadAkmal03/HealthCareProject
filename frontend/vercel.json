@@ -1,6 +1,23 @@
 {
   "rewrites": [
     {
+      "source": "/api/predict",
+      "destination": "http://3.107.252.106/predict"
+    },
+    {
+      "source": "/api/predict/",
+      "destination": "http://3.107.252.106/predict/"
+    },
+    {
+      "source": "/api/analyze",
+      "destination": "http://3.107.252.106/analyze"
+    },
+    {
+      "source": "/api/analyze/",
+      "destination": "http://3.107.252.106/analyze/"
+    },
+
+    {
       "source": "/api/:path*",
       "destination": "http://3.107.252.106/:path*"
     }
