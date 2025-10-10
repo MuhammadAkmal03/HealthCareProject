@@ -47,17 +47,22 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             # This script runs ON YOUR EC2 INSTANCE
+            
             # 1. Log in to the same ECR registry
             aws ecr get-login-password --region ${{ env.AWS_REGION }} | sudo docker login --username AWS --password-stdin ${{ steps.login-ecr.outputs.registry }}
+
+            # 2. *** CRITICAL STEP: CLEAN UP DISK SPACE ***
+            #    This removes all unused images, containers, and volumes to free up space.
+            sudo docker system prune -a -f --volumes
             
-            # 2. Pull the new Docker image from ECR
+            # 3. Pull the new Docker image from ECR
             sudo docker pull ${{ steps.build-image.outputs.image }}
             
-            # 3. Stop and remove the old container if it exists
+            # 4. Stop and remove the old container if it exists
             sudo docker stop pulse-ai-container || true
             sudo docker rm pulse-ai-container || true
             
-            # 4. Run the new container, mapping public port 80 to the container's internal port 8000
+            # 5. Run the new container, mapping public port 80 to the container's internal port 8000
             sudo docker run -d --name pulse-ai-container \
               -p 80:8000 \
               -e GOOGLE_API_KEY="${{ secrets.GOOGLE_API_KEY }}" \
