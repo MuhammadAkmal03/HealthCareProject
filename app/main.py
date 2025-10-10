@@ -16,6 +16,8 @@ app = FastAPI(
     title="Healthcare AI API",
     description="API for all healthcare modules.",
     version="1.0.0",
+
+    redirect_slashes=False
 )
 
 origins = ["https://health-care-project-five.vercel.app","http://localhost", "http://127.0.0.1", "http://127.0.0.1:5500", "null"]
@@ -28,7 +30,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-#  API Routers 
+# API Routers (Prefixes are correct as they are)
 app.include_router(
     symptom_predictor.router, prefix="/predict", tags=["Symptom Predictor"]
 )
