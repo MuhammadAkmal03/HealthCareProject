@@ -1,127 +1,139 @@
-# **Pulse AI: End-to-End Multimodal Healthcare Platform**
+# Pulse AI — Multimodal Healthcare Platform
 
-A production-ready application demonstrating a complete **MLOps lifecycle** for preliminary medical diagnostics and data analysis.
+A full-stack AI application I built to explore what it looks like when multiple healthcare models — symptom analysis, medical imaging, RAG-based Q&A, and report summarization — are wired together into a single deployable product.
+
+This isn't just a notebook project. It's containerized, CI/CD automated, and deployed on AWS, with a live frontend on Vercel.
+
+<!-- 🌐 **Live Demo:** [health-care-project-five.vercel.app](https://health-care-project-five.vercel.app) -->
+**Project Documentation:** [Document](https://drive.google.com/file/d/1DpXyu6-mMow_ADb0Z35rJE5UWOujLZNo/view?usp=sharing)
 
 ---
 
-## ** Project Overview**
+## What It Does
 
-Pulse AI successfully integrates multiple state-of-the-art AI technologies into a single, cohesive web platform. The core achievement is moving three complex, data-intensive models into a single, efficient, and automated cloud environment.
-
-### **Key Achievements**
-
-| Feature | Technology & Contribution | MLOps Practice Demonstrated |
+| Module | Model / Stack | Result |
 |:---|:---|:---|
-| **Symptom Checker (ML)** | LightGBM classifier with **92% accuracy** . | **Data Preprocessing Pipelines** (`joblib`, `ColumnTransformer`) for clean real-time inference. |
-| **Image Analyzer (DL)** | TensorFlow CNN for X-ray analysis | **Model Optimization & Efficiency** |
-| **AI Medical Assistant** | **Retrieval-Augmented Generation (RAG)** using **Gemini** and **LangChain** / **Pinecone** vector store. | **LLM Grounding** and using **Vector Databases** for private knowledge. |
-| **Report Summarizer** | AI-powered medical report summarization using **Gemini LLM** to extract key insights from user-provided medical documents. | **Natural Language Processing** and **Document Understanding** for clinical text analysis. |
-| **Data Analytics** | Live monitoring dashboard visualizing **real-time prediction trends** and **top 5 user queries** (via Chart.js). Integrated Tableau dashboard for comprehensive dataset overview and exploratory data analysis. | **Data Logging & Monitoring** of operational metrics. |
+| **Symptom Checker** | LightGBM classifier — 5 disease classes | **92% accuracy**  |
+| **X-Ray Analyzer** | TensorFlow CNN — Pneumonia vs Normal | **93% overall**  |
+| **AI Medical Assistant** | RAG — Gemini 2.5 Flash + LangChain + Pinecone | Grounded answers from a private medical knowledge base |
+| **Report Summarizer** | Gemini 2.5 Flash — PDF and raw text input | Extracts key clinical insights in plain language |
+| **Analytics Dashboard** | SQLite + Chart.js + Tableau | Real-time prediction trends and top AI query topics |
 
 ---
 
-## ** MLOps & Deployment Pipeline**
+## Model Performance
 
-The entire backend deployment is automated to ensure reliability, maintainability, and quick iteration.
+### Symptom Checker — LightGBM 
 
-### **1. CI/CD Workflow (GitHub Actions)**
+Classifies between 5 conditions: **Bronchitis, Cold, Flu, Healthy, Pneumonia**
 
-The pipeline is triggered on every `git push` to the main branch and performs the following sequence:
+```
+               precision    recall  f1-score   
+   Bronchitis       0.90      0.88      0.89        
+         Cold       0.92      0.93      0.92        
+          Flu       0.97      0.89      0.93        
+      Healthy       0.92      0.93      0.92        
+    Pneumonia       0.87      0.96      0.91        
 
-1. **Code Quality Check:** Runs `black` and `ruff` checks.
-2. **Unit Testing:** Executes **`pytest`** to validate all API endpoints for the Symptom Checker, Image Analyzer, and AI Assistant.
-3. **Containerization:** Builds a new, optimized **Docker** image (using a minimal base image).
-4. **Deployment:** Securely connects via SSH to the **AWS EC2** instance, pulls the new image from **Amazon ECR**, and restarts the container with zero downtime.
+     accuracy                           0.92       
+    macro avg       0.92      0.92      0.91     
+ weighted avg       0.92      0.92      0.92  
+```
 
-### **2. Security & Artifact Management**
+### X-Ray Analyzer — CNN 
 
-* **Model Versioning:** Large model files (`.h5`, `.joblib`) are stored and managed using **Git LFS** (Large File Storage) to keep the main repository clean and fast.
-* **Decoupled Architecture:** The application uses a separated backend (FastAPI/Docker on AWS) and a frontend (HTML/JS on Vercel) for better scalability and flexibility.
+Binary classification: **Pneumonia vs Normal** on chest X-rays (150×150 input)
+
+```
+              precision    recall  f1-score   
+      NORMAL       0.88      0.87      0.88       
+   PNEUMONIA       0.95      0.96      0.95       
+
+    accuracy                           0.93       
+   macro avg       0.92      0.91      0.92       
+weighted avg       0.93      0.93      0.93       
+```
 
 ---
 
-## ** Getting Started (Local Setup)**
+## Tech Stack
 
-To run the full backend and frontend on your machine:
+**Backend** — FastAPI, LightGBM, TensorFlow/Keras, LangChain, Pinecone, HuggingFace (`all-MiniLM-L6-v2` embeddings), Gemini 2.5 Flash, SQLite, Docker, AWS EC2 + ECR
 
-### **Prerequisites**
+**Frontend** — HTML5, CSS3, JavaScript, Chart.js, Tableau — deployed on Vercel
 
-* Python 3.10+
-* Docker Desktop (Installed and Running)
-* AWS CLI (Installed and Configured)
-* Gemini and Pinecone API Keys
+**MLOps** — GitHub Actions (CI/CD), Git LFS for model versioning, pytest for endpoint testing, `black` + `ruff` for code quality
 
-### **Installation & Execution**
+---
 
-1. **Clone the Repository:**
+## MLOps Pipeline
+
+Every `git push` to `main` triggers the following:
+
+1. Linting and formatting checks (`black`, `ruff`)
+2. Unit tests via `pytest` covering all API endpoints
+3. Docker image build (minimal base image)
+4. Automated deploy to AWS EC2 via SSH — pulls from ECR, restarts container
+
+Models (`.h5`, `.joblib`) are tracked with **Git LFS** to keep the repo clean. Frontend and backend are fully decoupled — FastAPI on AWS, static frontend on Vercel.
+
+---
+
+## Architecture
+
+```
+Frontend (Vercel)
+    ├── index.html             → Landing page
+    ├── mlprediction.html      → Symptom Checker UI
+    ├── dlprediction.html      → X-Ray Analyzer UI
+    ├── aiassist.html          → AI Assistant + Report Summarizer
+    └── trendchart.html        → Analytics Dashboard
+
+Backend (FastAPI on AWS EC2)
+    ├── /predict               → LightGBM symptom classifier
+    ├── /analyze               → TensorFlow CNN image classifier
+    ├── /assistant/chat        → RAG conversational chain
+    ├── /assistant/summarize   → Gemini-powered report summarizer
+    └── /assistant/query_topics → Analytics — top AI query topics
+
+Data Layer
+    └── SQLite (predictions.db)
+        ├── predictions        → Diagnosis logs for trend chart
+        └── chatbot_queries    → Query topics for analytics chart
+```
+
+---
+
+## Running Locally
+
+**Prerequisites:** Python 3.10+, Docker Desktop, Gemini and Pinecone API keys
 
 ```bash
+# 1. Clone
 git clone https://github.com/MuhammadAkmal03/HealthCareProject
 cd HealthCareProject
-```
 
-2. **Create/Update `.env`:** Add your secret API keys to a file named `.env` in the root directory.
+# 2. Add your API keys to .env 
 
-3. **Build the Docker Image:**
-
-```bash
+# 3. Build and run
 docker build -t pulse-ai-api .
-```
-
-4. **Run the Container:**
-
-```bash
 docker run -d --name pulse-ai-local -p 8000:8000 --env-file .env pulse-ai-api
 ```
 
-* **Access API Docs:** `http://localhost:8000/docs`
-* **Access Frontend:** Open the `frontend/index.html` file in your browser.
+- **API Docs (auto-generated):** `http://localhost:8000/docs`
+- **Frontend:** Open `frontend/index.html` in your browser
 
 ---
 
-## ** Architecture & Technology Stack**
+## Environment Variables
 
-### **Backend (AWS EC2)**
-* **Framework:** FastAPI
-* **ML/DL Models:** LightGBM, TensorFlow/TFLite
-* **RAG Stack:** LangChain, Gemini, Pinecone
-* **Containerization:** Docker
-* **Container Registry:** Amazon ECR
-
-### **Frontend (Vercel)**
-* **Tech Stack:** HTML5, CSS3, JavaScript
-* **Visualization:** Chart.js
-* **Deployment:** Vercel (Serverless)
-
-### **DevOps & MLOps**
-* **CI/CD:** GitHub Actions
-* **Version Control:** Git, Git LFS
-* **Cloud Provider:** AWS (EC2, ECR)
-* **Monitoring:** Custom logging and analytics dashboard
-
----
-
-### **Production Features**
-
-*  **Zero-downtime deployments** using Docker container orchestration
-*  **Automated testing** with pytest for all API endpoints
-*  **Real-time analytics** dashboard for monitoring usage patterns
-*  **Secure API key management** using environment variables
-*  **CORS configuration** for secure cross-origin requests
-*  **Scalable architecture** with decoupled frontend and backend
-
----
-
-## ** Environment Configuration**
-
-Create a `.env` file in the project root with the following variables:
+Create a `.env` file in the project root:
 
 ```env
-# API Keys
 GEMINI_API_KEY=your_gemini_api_key_here
 PINECONE_API_KEY=your_pinecone_api_key_here
 
-# AWS Configuration (for deployment)
+# AWS (required for deployment only)
 AWS_ACCESS_KEY_ID=your_aws_access_key
 AWS_SECRET_ACCESS_KEY=your_aws_secret_key
 AWS_REGION=your_aws_region
@@ -129,48 +141,28 @@ ECR_REPO=your_ecr_repository_url
 EC2_HOST=your_host
 EC2_USERNAME=username
 EC2_SSH_KEY=ssh_key
-
 ```
 
 ---
 
-## ** Testing**
-
-Run the test suite to ensure all components are working correctly:
+## Running Tests
 
 ```bash
-# Install test dependencies
 pip install pytest pytest-cov
-
-# Run all tests
 pytest tests/
-
-# Run tests with coverage report
-pytest --cov=app tests/
+pytest --cov=app tests/  
 ```
 
 ---
 
-## ** Future Enhancements**
+## What I'd Add Next
 
-- [ ] Add more medical imaging models (CT scans, MRI)
-- [ ] Implement user authentication and history tracking
-- [ ] Expand symptom checker with more diseases
-- [ ] Add multi-language support
-- [ ] Integrate real-time model performance monitoring
-- [ ] Implement A/B testing for model improvements
-
----
-
-## ** Contributing**
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+- User authentication + prediction history
+- More imaging models (CT scans, MRI)
+- A/B testing for model comparison
+- Multi-language support
+- Expanded symptom coverage
 
 ---
 
+*Built by [Muhammad Akmal](https://github.com/MuhammadAkmal03)*
