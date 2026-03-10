@@ -9,6 +9,19 @@ This isn't just a notebook project. It's containerized, CI/CD automated, and dep
 
 ---
 
+## Key Features
+
+- **Multimodal AI** — Three independent models (ML, DL, LLM) working together in one platform: symptom classification, chest X-ray analysis, and conversational Q&A
+- **End-to-End MLOps** — Automated CI/CD via GitHub Actions: lint → test → Docker build → deploy to AWS EC2, all on every push
+- **RAG Pipeline** — AI assistant grounded in a private medical knowledge base (Pinecone vector store + Gemini 2.5 Flash), not just a generic chatbot
+- **Report Summarizer** — Upload a PDF or paste medical text; Gemini extracts and explains key clinical findings in plain language
+- **Decoupled Architecture** — FastAPI backend on AWS EC2, static frontend on Vercel — independently scalable and deployable
+- **Live Analytics Dashboard** — SQLite logs every prediction and AI query; Chart.js visualizes real-time trends and top query topics
+- **Model Versioning** — Large model files tracked with Git LFS, keeping the repo fast without losing artifact history
+- **Automated Testing** — pytest suite covering all API endpoints with coverage reporting
+
+---
+
 ## What It Does
 
 | Module | Model / Stack | Result |
